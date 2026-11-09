@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta property="og:type" content="website">
+<meta property="og:title" content="BUROCK · One More Day Busan">
+<meta property="og:description" content="부락 다음 날, 부산에서 하루 더 · 로컬 하루 코스 · 시장 · 축제 (VS BI prototype)">
+<meta property="og:image" content="https://burock-onemoreday.vercel.app/og.jpg">
+<meta property="og:url" content="https://burock-onemoreday.vercel.app">
+<title>BUROCK · One More Day Busan</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+@font-face { font-family:"BUROCK"; src:url("assets/BUROCK.otf") format("opentype"); }
+:root{
+  --navy:#0b3387; --night:#011456; --orange:#ec9c00; --red:#c90614; --pink:#cb2e59; --sky:#a4bbd3;
+  --beige:#f1ece3; --beige2:#e6dfd3; --ink:#1a1d2e; --mute:#6b6f80; --line:#dcd6cb;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#fff;color:var(--ink);font-family:"Pretendard",system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.app{max-width:480px;margin:0 auto;position:relative;min-height:100vh;overflow:hidden;background:#fff}
+
+/* edge stripes (BI motif, like Fuji Rock's side bars) */
+.edge{position:absolute;top:118px;bottom:0;width:5px;z-index:1;
+  background:repeating-linear-gradient(180deg,var(--orange) 0 26px,transparent 26px 70px,var(--navy) 70px 110px,transparent 110px 150px,var(--pink) 150px 168px,transparent 168px 240px)}
+.edge.l{left:0}.edge.r{right:0;background-position:0 90px}
+
+/* header */
+header{background:var(--navy);color:#fff;display:flex;align-items:flex-start;height:56px;position:sticky;top:0;z-index:20}
+header .brand{flex:1;padding:0 0 0 14px;line-height:56px}
+header .brand b{font-family:"BUROCK";font-size:24px;display:block;font-weight:400}
+header .brand small{font-size:9px;letter-spacing:.06em;opacity:.85}
+header .lang{margin-top:14px;margin-right:14px !important;border:1.5px solid #fff;border-radius:99px;font-size:11px;font-weight:700;padding:4px 10px;margin-right:10px}
+header .menu{width:62px;background:#fff;color:var(--navy);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;font-weight:800;letter-spacing:.06em;height:62px;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+header .menu img{width:28px;margin-bottom:2px}
+
+/* icon strip */
+.strip{margin:12px 10px 0;background:#fff;border-radius:12px;box-shadow:0 2px 10px rgba(11,51,135,.14);display:flex;overflow-x:auto;scrollbar-width:none;position:relative;z-index:5}
+.strip a{flex:none;width:76px;padding:9px 4px 8px;text-align:center;font-size:10px;font-weight:700;color:var(--navy);border-right:1px solid var(--line);line-height:1.2}
+.strip a:last-child{border-right:0}
+.strip a img{height:30px;display:block;margin:0 auto 4px;object-fit:contain}
+.strip a svg{height:30px;width:30px;display:block;margin:0 auto 4px}
+.strip a.on{background:var(--beige)}
+
+main{padding:0 22px 40px;position:relative;z-index:2}
+.pill{margin:18px -8px 18px;background:var(--beige);border-radius:14px;padding:13px 16px;display:flex;justify-content:space-between;align-items:center}
+.pill h1{font-size:17px;font-weight:800;color:var(--navy);letter-spacing:.04em}
+.pill span{font-size:12px;color:var(--mute)}
+.sec{text-align:center;font-family:"BUROCK";font-size:min(24px,5.1vw);white-space:nowrap;color:var(--navy);margin:34px 0 16px;font-weight:400}
+.sec::before,.sec::after{content:"";display:inline-block;width:12px;height:12px;vertical-align:3px;margin:0 7px}
+.sec::before{background:var(--orange);border-radius:50%}.sec::after{background:var(--pink);border-radius:2px;transform:rotate(45deg)}
+
+/* home hero */
+.hero{margin:14px -22px 0;background:linear-gradient(180deg,#fff 0,var(--beige) 100%);padding:18px 22px 0;text-align:center}
+.hero h2{font-family:"BUROCK";font-size:38px;line-height:.95;color:var(--navy);font-weight:400}
+.hero h2 em{font-style:normal;color:var(--orange)}
+.hero p{font-size:13px;color:var(--mute);margin-top:8px}
+.hero .band{display:flex;justify-content:center;align-items:flex-end;gap:2px;margin-top:14px;height:150px}
+.hero .band img{height:118px;width:auto}.hero .band img.c{height:148px}
+.hero .floor{height:14px;margin:0 -22px;background:repeating-linear-gradient(90deg,var(--navy) 0 4px,transparent 4px 9px)}
+
+/* news-card style list (Fuji Rock home) */
+.cards{background:var(--beige);border-radius:16px;padding:10px;display:grid;gap:10px}
+.card{display:grid;grid-template-columns:112px 1fr;gap:12px;align-items:center}
+.card .th{height:78px;border-radius:8px;display:flex;align-items:flex-end;justify-content:center;overflow:hidden}
+.card .th img{height:72px}
+.card .tx small{font-size:12px;color:var(--mute);font-weight:600;display:block}
+.card .tx b{font-size:16px;font-weight:800;line-height:1.3;display:block}
+.more{display:flex;align-items:center;justify-content:center;gap:10px;margin:16px auto 0;width:78%;background:var(--beige);border-radius:99px;padding:12px;font-weight:700;font-size:14px}
+.more i{width:22px;height:22px;border:2px solid var(--orange);border-radius:50%;display:grid;place-items:center;color:var(--orange);font-style:normal;font-size:12px}
+
+/* plain list (Fuji Rock area guide) */
+.list{border-top:1px solid var(--line)}
+.list a{display:grid;grid-template-columns:52px 1fr 16px;align-items:center;padding:14px 2px;border-bottom:1px solid var(--line)}
+.list .tm{font-size:13px;font-weight:800;color:var(--orange)}
+.list .nm small{display:block;font-size:11px;color:var(--mute);letter-spacing:.04em;text-transform:uppercase}
+.list .nm b{font-size:15px;font-weight:700}
+.list .nm span{font-size:12px;color:var(--mute);margin-left:4px}
+.list .ar{color:var(--navy);font-weight:700}
+.intro{display:grid;grid-template-columns:96px 1fr;gap:12px;align-items:center;margin-bottom:14px}
+.intro img{width:96px}
+.intro p{font-size:14px}
+.intro p b{color:var(--navy)}
+.meta{font-size:12px;color:var(--mute);margin-bottom:10px}
+
+/* detail */
+.visual{margin:14px -22px 0;height:180px;position:relative;display:flex;align-items:flex-end;padding:16px 22px;color:#fff;overflow:hidden}
+.visual .bars{position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,255,255,.16) 0 3px,transparent 3px 9px)}
+.visual img{position:absolute;right:14px;bottom:-8px;height:140px}
+.visual .cap{position:relative;z-index:2}
+.visual .cap small{font-size:12px;font-weight:700;letter-spacing:.06em;opacity:.9}
+.visual .cap h1{font-family:"BUROCK";font-size:22px;line-height:1.05;max-width:240px;font-weight:400}
+.dt h2{font-size:19px;font-weight:800;margin-top:18px}
+.dt h2 span{font-size:14px;color:var(--mute);font-weight:500;margin-left:6px}
+.badge{display:inline-block;font-size:10px;font-weight:800;color:#fff;background:var(--orange);border-radius:99px;padding:2px 8px;margin-top:6px}
+.dt .lead{font-size:15px;margin-top:10px}
+.info{margin-top:18px;border-top:1px solid var(--line)}
+.info .row{display:grid;grid-template-columns:30px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid var(--line)}
+.info .row svg{width:22px;height:22px;stroke:var(--orange);fill:none;stroke-width:1.8;margin-top:1px}
+.info .row h4{font-size:12px;font-weight:800;color:var(--mute)}
+.info .row p{font-size:14px}
+.note{background:var(--beige);padding:14px 16px;margin-top:18px;font-size:13px}
+.note h5{font-size:13px;font-weight:800;margin-bottom:4px}
+.btn{display:block;text-align:center;background:var(--navy);color:#fff;border-radius:16px;padding:16px;font-weight:700;font-size:15px;margin-top:20px}
+.btn.ghost{background:var(--beige);color:var(--navy);margin-top:10px}
+.pager{display:flex;justify-content:space-between;gap:10px;margin-top:16px;font-size:12px;font-weight:700;color:var(--navy)}
+
+/* culture & tradition rows */
+.trow{padding:16px 2px;border-bottom:1px solid var(--line)}
+.trow small{font-family:"BUROCK";font-size:12px;color:var(--orange)}
+.trow b{display:block;font-size:16px;font-weight:800}
+.trow b span{font-size:13px;color:var(--mute);font-weight:500;margin-left:4px}
+.trow p{font-size:14px;color:#3b3f50;margin-top:2px}
+
+
+/* illustrated district map */
+.map{margin:14px -22px 0;background:#dce8f3;position:relative}
+.map svg{display:block;width:100%;height:auto}
+.mapcap{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:11px;color:var(--mute);margin:8px 0 0}
+.mapcap i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+.mrow{display:grid;grid-template-columns:1fr auto;gap:8px;padding:15px 2px;border-bottom:1px solid var(--line)}
+.mrow small{font-family:"BUROCK";font-size:11px;color:var(--orange)}
+.mrow b{display:block;font-size:16px;font-weight:800}
+.mrow b span{font-size:13px;color:var(--mute);font-weight:500;margin-left:4px}
+.mrow p{font-size:13.5px;color:#3b3f50;margin-top:2px}
+.mrow .hrs{font-size:12px;color:var(--mute)}
+.mrow .lk{display:flex;gap:12px;margin-top:6px;font-size:12px;font-weight:700;color:var(--navy)}
+.mrow .gu{font-size:11px;font-weight:700;color:var(--navy);background:var(--beige);border-radius:99px;padding:2px 8px;height:fit-content}
+
+
+/* motif band (day title) */
+.dband{margin:0 -22px 0;min-height:200px;background-size:cover;background-position:center 14%;display:block;padding:20px 12px 0 22px;position:relative}
+.dband .bt{padding-bottom:58px}
+.dband.sm{min-height:110px}
+.dband .bt small{font-size:12px;font-weight:700;opacity:.95}
+.dband .bt h1{font-family:"BUROCK";font-size:26px;line-height:1;font-weight:400;margin:2px 0 6px}
+.dband .bt p{font-size:12.5px;font-weight:600;line-height:1.45;background:rgba(255,255,255,.88);color:#1a1d2e;border-radius:8px;padding:6px 9px;display:inline-block}
+.dband img{position:absolute;right:10px;bottom:0;width:auto}.dband img.sasang{height:140px}.dband img.saha{height:124px}.dband img.oldtown{height:139px}.dband.sm img.sasang{height:98px}.dband.sm img.saha{height:87px}.dband.sm img.oldtown{height:97px}.dband.sm .bt{padding-bottom:20px;padding-right:110px}.dband .bt p{width:176px;min-height:calc(3 * 1.45em + 12px);box-sizing:border-box;word-break:keep-all;white-space:nowrap}
+.card .th{background-size:cover;background-position:center 25%}
+.list a.ph{grid-template-columns:52px 1fr 64px;gap:0}
+.thumb{width:64px;height:64px;border-radius:8px;object-fit:cover;display:block;background-size:cover;background-position:center}
+/* detail hero */
+.hero2{margin:14px -22px 0;height:230px;position:relative;background:#ddd;background-size:cover;background-position:center 20%;overflow:hidden}
+.hero2 img{width:100%;height:100%;object-fit:cover;display:block}
+.hero2 .cr{position:absolute;right:8px;bottom:6px;font-size:9.5px;color:#fff;background:rgba(0,0,0,.45);padding:2px 6px;border-radius:4px}
+.mstrip{margin:0 -22px;height:12px;background-size:cover;background-position:center 75%}
+.dt .when{font-size:11px;font-weight:800;letter-spacing:.06em;margin-top:16px}
+.dt h2{font-size:21px;font-weight:800;margin-top:2px;line-height:1.25}
+.dt .kname{font-size:13px;color:var(--mute)}
+.localnote{margin-top:14px;border-left:4px solid var(--orange);background:var(--beige);padding:12px 14px}
+.localnote h5{font-family:"BUROCK";font-size:12px;color:var(--navy);font-weight:400;margin-bottom:4px}
+.localnote p{font-size:14.5px;line-height:1.6}
+.srcline{font-size:12px;color:var(--mute);margin-top:10px}
+/* markets photo */
+.mph{width:104px}
+.mph img{width:104px;height:78px;object-fit:cover;border-radius:8px;display:block}
+.mph span{display:block;font-size:8.5px;color:var(--mute);line-height:1.3;margin-top:3px}
+/* rock x tradition */
+.tlead{font-size:15px;font-weight:600;margin:-4px 0 6px}
+.tcard{padding:16px 0;border-bottom:1px solid var(--line)}
+.tag2{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.tag2 span{font-family:"BUROCK";font-size:12px;color:#fff;background:var(--navy);padding:3px 9px;border-radius:99px}
+.tag2 i{font-style:normal;color:var(--orange);font-weight:800}
+.tag2 b{font-size:15.5px;font-weight:800}
+.tko{font-size:12px;color:var(--mute);margin:3px 0 4px}
+.tcard p{font-size:14px}
+.tcard .tmeta{font-size:11.5px;color:var(--mute);margin-top:6px}
+.tnote{font-size:11.5px;color:var(--mute);margin-top:14px}
+
+
+/* events */
+.cal{display:grid;gap:12px}
+.evc{display:grid;grid-template-columns:86px 1fr;gap:14px;align-items:center;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.evc img{width:86px;height:120px;object-fit:cover;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.evc small{font-family:"BUROCK";font-size:13px;color:var(--orange)}
+.evc b{display:block;font-size:16px;font-weight:800;line-height:1.25}
+.evc span{display:block;font-size:12px;color:var(--mute)}
+.evc em{display:inline-block;margin-top:6px;font-style:normal;font-size:11px;font-weight:700;color:var(--navy);background:var(--beige);border-radius:99px;padding:2px 8px}
+.poster{margin:14px -22px 0;background:var(--beige2);padding:18px 0;text-align:center;position:relative}
+.poster img{width:62%;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.poster .cr{display:block;font-size:10px;color:var(--mute);margin-top:8px}
+.stats{display:grid;grid-template-columns:1fr;gap:6px;margin-top:14px}
+.stats div{background:var(--navy);color:#fff;border-radius:10px;padding:10px 12px;display:grid;grid-template-columns:146px 1fr;align-items:center;gap:8px}
+.stats b{font-family:"BUROCK";font-size:17px;white-space:nowrap;color:#ffc93c;font-weight:400}
+.stats span{font-size:12px;line-height:1.35}
+.prow{display:flex;gap:10px;overflow-x:auto;margin:0 -22px;padding:0 22px 6px;scrollbar-width:none}
+.prow a{flex:none;width:112px}
+.prow img{width:112px;height:156px;object-fit:cover;border-radius:6px;display:block;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.prow small{font-family:"BUROCK";font-size:11px;color:var(--orange);display:block;margin-top:6px}
+.prow b{font-size:12.5px;line-height:1.3;display:block}
+/* market detail */
+.sub{font-family:"BUROCK";font-size:15px;color:var(--navy);font-weight:400;margin:22px 0 6px}
+.enjoy{list-style:none;counter-reset:n}
+.enjoy li{counter-increment:n;position:relative;padding:10px 0 10px 34px;border-bottom:1px solid var(--line)}
+.enjoy li::before{content:counter(n);position:absolute;left:0;top:11px;width:22px;height:22px;border-radius:50%;background:var(--orange);color:#fff;font-size:12px;font-weight:800;display:grid;place-items:center}
+.enjoy b{font-size:15px}
+.enjoy p{font-size:13.5px;color:#3b3f50}
+/* story timeline */
+.tl2{position:relative;margin-top:10px}
+.tl2::before{content:"";position:absolute;left:74px;top:4px;bottom:4px;width:2px;background:repeating-linear-gradient(180deg,var(--orange) 0 10px,var(--pink) 10px 20px,var(--navy) 20px 30px)}
+.ev{display:grid;grid-template-columns:66px 1fr;gap:22px;padding:10px 0 14px}
+.ev .yr{font-family:"BUROCK";font-size:15px;color:var(--navy);line-height:1.1;text-align:right}
+.ev .bd b{font-size:16px;font-weight:800;display:block}
+.ev .bd p{font-size:14px;margin-top:4px}
+
+
+/* market shops */
+.shops{display:grid;gap:12px}
+.shop{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.shop img{width:100%;height:150px;object-fit:cover;display:block}
+.shop .sb{padding:10px 12px 12px}
+.shop .stall{display:inline-block;font-size:11px;font-weight:800;color:#fff;background:var(--orange);border-radius:99px;padding:2px 9px;margin-bottom:4px}
+.shop b{display:block;font-size:15.5px;font-weight:800}
+.shop p{font-size:13.5px;margin-top:4px}
+.shop .sm{font-size:12px;color:var(--mute)}
+.shop .sm a{color:var(--navy);font-weight:700}
+.shop .cr2{font-size:10px;color:#a0a3ad;margin-left:6px}
+
+
+/* legs between stops */
+.leg{display:flex;align-items:center;gap:8px;padding:6px 2px 6px 56px;font-size:12px;color:var(--mute);border-bottom:1px dashed var(--line)}
+.leg i{font-style:normal;font-size:9.5px;font-weight:800;letter-spacing:.05em;padding:2px 6px;border-radius:4px;background:var(--beige);color:var(--navy)}
+.leg i.transit{background:var(--navy);color:#fff}
+/* essentials */
+.ess{display:grid;gap:14px}
+.ec{border:1px solid var(--line);border-radius:12px;overflow:hidden;position:relative}
+.ec img{width:100%;height:180px;object-fit:cover;display:block}
+.ec .cr{position:absolute;right:8px;top:156px;font-size:9px;color:#fff;background:rgba(0,0,0,.45);padding:2px 6px;border-radius:4px}
+.ec .eb{padding:12px 14px 14px}
+.ec small{font-family:"BUROCK";font-size:11px;color:var(--orange)}
+.ec b{display:block;font-size:17px;font-weight:800}
+.ec p{font-size:13.5px;margin-top:4px}
+.ec .sm{font-size:12px;color:var(--mute)}
+.ec .sm a{color:var(--navy);font-weight:700}
+.ec .src2{font-size:10.5px;color:#a0a3ad;margin-top:6px}
+
+/* floating vertical tab (Fuji Rock "Buy Tickets") */
+.ftab{position:fixed;right:max(0px,calc(50% - 240px));bottom:90px;z-index:30;background:var(--navy);color:#fff;border-radius:12px 0 0 12px;padding:12px 7px;writing-mode:vertical-rl;font-size:12px;font-weight:800;letter-spacing:.04em;border:2px solid #fff;border-right:0}
+
+/* footer sitemap */
+footer{background:var(--beige2);padding:18px 22px 30px;position:relative;z-index:2}
+.site{display:grid;grid-template-columns:1fr 1fr;gap:16px 10px}
+.site a{display:flex;align-items:center;gap:10px;font-weight:800;font-size:13px;color:var(--navy)}
+.site a i{flex:none;width:40px;height:40px;border-radius:50%;background:var(--beige);display:grid;place-items:center;overflow:hidden}
+.site a i img{height:32px}
+.site a i svg{width:24px;height:24px}
+.fine{font-size:11px;color:var(--mute);margin-top:0;line-height:1.6}
+
+/* menu overlay */
+.overlay{position:fixed;inset:0;z-index:50;display:none;justify-content:center;background:rgba(1,20,86,.35)}
+.overlay.open{display:flex}
+.overlay .panel{width:100%;max-width:480px;background:var(--beige2);padding:80px 26px 30px;position:relative}
+.overlay .x{position:absolute;top:18px;right:18px;font-size:13px;font-weight:800;color:var(--navy)}
+
+/* day agenda in v2 style (colour field panel) */
+.dg{margin:0 -22px;background:var(--f);color:var(--i);padding:22px 16px 40px}
+.dg ol{list-style:none;display:grid;gap:4px;margin:0;padding:0}
+.dg .st{display:grid;grid-template-columns:58px 1fr 72px;gap:12px;align-items:center;padding:14px 14px;background:var(--b1)}
+.dg .st:nth-child(4n+3){background:var(--b2)}
+.dg time{font-size:20px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.dg h4{font-size:15px;line-height:1.3;font-weight:800;margin:0;word-break:keep-all}
+.dg h4 a{color:inherit;text-decoration:none}
+.dg h4 span{font-weight:500;font-size:12.5px}
+.dg p{font-size:13px;line-height:1.4;margin:3px 0 0;word-break:keep-all}
+.dg .nt{color:var(--s)}
+.dg .nv{display:inline-block;margin-top:6px;font-size:13px;font-weight:800;color:inherit;text-decoration:underline;text-underline-offset:3px}
+.dg .th{width:72px;height:72px;object-fit:cover;display:block;background-size:cover;background-position:center}
+.dg .lg{font-size:12.5px;padding:6px 14px 6px 84px;color:var(--s);word-break:keep-all}
+.dg .lg span{font-weight:800;margin-right:8px;color:var(--i)}
+
+.hgap{height:14px}
+/* ===== laptop / desktop layout ===== */
+@media (min-width:1000px){
+  .app{max-width:1200px;overflow:clip}
+  header{height:68px}
+  header .brand{line-height:68px;padding-left:40px}
+  header .brand b{font-size:30px}
+  header .lang{margin-top:19px;margin-right:40px !important}
+  .strip{margin:16px 40px 0;justify-content:center;overflow:visible}
+  .strip a{flex:1 1 0;width:auto;font-size:12.5px;padding:12px 6px 10px}
+  .strip a img,.strip a svg{height:36px;width:auto}
+  main{padding:0 40px 60px}
+  .sec{font-size:30px;margin:56px 0 22px}
+  /* full-bleed blocks follow the wider gutter */
+  .hero,.map,.dband,.dg,.hero2,.mstrip,.poster,.visual{margin-left:-40px;margin-right:-40px}
+  .prow{margin:0;padding:0 0 6px}
+  /* home hero: title left, band right */
+  .hero{display:grid;grid-template-columns:1.4fr 1fr;align-items:center;column-gap:24px;text-align:left;padding:40px 60px 0}
+  .hero h2{grid-column:1;font-size:50px;white-space:nowrap}
+  .hero p{grid-column:1;font-size:17px;margin-top:14px;align-self:start}
+  .hero .band{grid-column:2;grid-row:1/3;height:260px;margin-top:0}
+  .hero .band img{height:190px}.hero .band img.c{height:236px}
+  .hero .floor{grid-column:1/-1;margin:0 -60px}
+  /* home: map beside the three day cards */
+  .hday{display:grid;grid-template-columns:3fr 2fr;gap:28px;align-items:center}
+  .hday .map{margin:0;border-radius:12px;overflow:hidden}
+  .hgap{display:none}
+  .cards{padding:14px;gap:14px}
+  .card{grid-template-columns:150px 1fr}
+  .card .th{height:104px}.card .th img{height:96px}
+  .card .tx b{font-size:20px}
+  .list{display:grid;grid-template-columns:repeat(3,1fr);column-gap:28px}
+  .more{width:340px}
+  .prow{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:16px;overflow:visible}
+  .prow a{width:auto}
+  .prow img{width:100%;height:auto;aspect-ratio:3/4}
+  .prow img[style]{height:auto!important;aspect-ratio:4/3}
+  .prow b{font-size:14px}
+  /* day page: map stays on the left, course on the right */
+  .dlay{display:grid;grid-template-columns:5fr 6fr;gap:32px;align-items:start;margin-top:24px}
+  .dmap{position:sticky;top:96px}
+  .dmap .map{margin:0;border-radius:12px;overflow:hidden}
+  .dmain .dband,.dmain .dg{margin-left:0;margin-right:0}
+  .dmain .dband{border-radius:12px 12px 0 0;min-height:240px}
+  .dg{padding:24px 20px 40px;border-radius:0 0 12px 12px}
+  .dg .st{grid-template-columns:76px 1fr 104px;padding:16px 18px}
+  .dg time{font-size:24px}
+  .dg h4{font-size:17px}.dg p{font-size:14px}
+  .dg .th{width:104px;height:80px}
+  .dg .lg{padding-left:112px;font-size:13.5px}
+  /* detail pages: wide photo, readable column */
+  .hero2{height:400px}
+  .dt,.tlead,.tl2{max-width:780px;margin-left:auto;margin-right:auto}
+  .pill{max-width:none;margin:28px 0 22px;padding:18px 24px}
+  .pill h1{font-size:22px}
+  .ess{grid-template-columns:repeat(3,1fr);gap:20px}
+  .ec .cr{top:156px}
+  .cal{grid-template-columns:repeat(2,1fr);gap:20px 32px}
+  .shops{grid-template-columns:repeat(2,1fr)}
+  .poster img{width:auto;height:520px}
+  main > .map{max-width:none}
+  footer{padding:24px 40px 36px}
+}
+
+/* scroll reveal (v2 style): parts rise in as they enter the screen */
+@media (min-width:1000px){
+.js .rv{opacity:0;transform:translateY(26px);transition:opacity .6s cubic-bezier(.2,.7,.2,1),transform .6s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0ms)}
+.js .rv.in{opacity:1;transform:none}
+}
+.dg .st{transition:transform .25s}
+.dg .st:hover .th{transform:scale(1.05)}
+.dg .th{transition:transform .3s}
+@media (prefers-reduced-motion:reduce){.js .rv{opacity:1;transform:none;transition:none}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <a class="brand" href="#home"><b>BUROCK</b></a>
+    <span class="lang">KO / EN</span>
+  </header>
+  <div class="edge l"></div><div class="edge r"></div>
+  <nav class="strip" id="strip"></nav>
+  <main id="view"></main>
+  <footer id="foot"></footer>
+</div>
+
+<script>
+const D = {"areas": [{"id": "sasang", "name": "Sasang · Gupo", "ko": "사상 · 구포", "title": "Riverside Day", "titleKo": "부락 바로 옆, 낙동강의 하루", "img": "shark_drums.png", "face": "shark.png", "guide": "Kkari", "color": "#2c3088", "span": "07:00 – 20:00", "stops": [{"t": "07:00", "cat": "Breakfast", "name": "Samnak Hadong Jaecheopguk", "ko": "삼락하동재첩국", "hood": "Sasang", "line": "Clam soup breakfast by the Nakdong", "menu": "재첩국 정식 ₩8,000 · 재첩회 ₩10,000", "hours": "05:00–21:30 · 명절 휴무", "addr": "사상구 낙동대로1518번길 33", "tel": "051-301-7200", "src": "Taste of Busan 2025", "q": "삼락하동재첩국", "photo": "samnak.jpg", "credit": "Photo: Taste of Busan 2025 (Busan City)", "local": "This stretch of the Nakdong riverbank is lined with jaecheopguk (tiny freshwater clam soup) restaurants. This one uses domestic clams from the Seomjin River, soaked in salt water and washed several times, and also helped popularize clams served raw and steamed. It opens at 5 a.m., so it works as a post-show breakfast."}, {"t": "08:30", "cat": "Walk", "name": "Samrak Ecological Park", "ko": "삼락생태공원", "hood": "Sasang", "line": "The festival ground, now quiet. Riverside walk.", "q": "삼락생태공원", "photo": "samrak.jpg", "credit": "Photo: VisitBusan", "local": "A 4.72 km² riverside park on the Nakdong floodplain. Cherry blossoms form a tunnel along the embankment in spring, reeds and cosmos fill it in autumn, and migratory birds rest here in winter. Bikes can be rented inside the park.", "go": {"mode": "transit", "min": 20, "text": "20 min · Bus 126, 6 stops"}}, {"t": "10:30", "cat": "Market", "name": "Gupo Market", "ko": "구포시장", "hood": "Buk-gu", "line": "400-year-old market. 5-day market on 3, 8, 13, 18, 23, 28.", "hours": "08:00–20:00 · 점포별 상이", "addr": "북구 구포시장2길 7", "access": "덕천역 3번 출구 도보 5분", "src": "VisitBusan", "q": "구포시장", "photo": "gupo.jpg", "credit": "Photo: VisitBusan", "local": "The market grew up around the old Gupo ferry, where goods came down the Nakdong. On dates ending in 3 and 8 the 5-day market spills into the side alleys. From the market entrance, the Geumbit Noeul (Golden Sunset) Bridge crosses to Hwamyeong Eco Park, a sunset spot over the river. The 1919 Gupo Manse Street (independence cry) starts right outside, with murals along 600 m.", "go": {"mode": "transit", "min": 23, "text": "23 min · Bus 126, 11 stops"}}, {"t": "12:30", "cat": "Lunch", "name": "Geumyong Dumpling", "ko": "금용 만두", "hood": "Buk-gu", "line": "Shandong-style dumplings since 1960", "menu": "찐만두 ₩8,000 · 군만두 ₩8,000", "hours": "10:30–20:30 · 명절 휴무", "addr": "북구 구포만세길 75", "tel": "051-332-1261", "src": "Taste of Busan 2025", "q": "금용만두 구포", "photo": "geumyong.jpg", "credit": "Photo: Taste of Busan 2025 (Busan City)", "local": "Open since 1960. Shandong-style dumplings filled with braised pork skin, beef shank and oxtail. The day's batch usually sells out, so go before evening.", "go": {"mode": "walk", "min": 12, "text": "Walk 12 min · 805 m"}}, {"t": "15:00", "cat": "Music", "name": "Sasang Indie Station", "ko": "사상인디스테이션", "hood": "Sasang", "line": "Indie venue built from 27 shipping containers", "hours": "평일 09:00–18:00 · 공연 시 변동", "addr": "사상구 사상로 190", "tel": "051-316-7631", "access": "사상역 2·4번 출구 140m", "src": "Busan Cultural Foundation", "q": "사상인디스테이션", "photo": "indie.jpg", "credit": "Photo: Busan Cultural Foundation", "local": "A youth indie venue built from 27 shipping containers, 140 m from Sasang Station. During BUROCK 2026 it hosted Bu-long Night, the after-party that kept the crowd in West Busan.", "go": {"mode": "transit", "min": 23, "text": "23 min · Metro Line 2, Gumyeong → Sasang, 5 stops"}}, {"t": "18:30", "cat": "Dinner", "name": "Gombo Sikdang", "ko": "곰보식당", "hood": "Sasang", "line": "Korean beef since 1975", "menu": "짝갈비살 ₩29,000 · 육회비빔밥 ₩15,000", "hours": "10:00–22:00 · 명절 전날·당일 휴무", "addr": "사상구 낙동대로 1564", "tel": "051-304-7733", "src": "Taste of Busan 2025", "q": "곰보식당 사상", "photo": "gombo.jpg", "credit": "Photo: Taste of Busan 2025 (Busan City)", "local": "Open since 1975. It serves only selected Korean beef and goes for the savory, original flavor of the meat rather than softness.", "go": {"mode": "transit", "min": 20, "text": "20 min · Bus 33, 10 stops to Bukgu Office"}}], "districts": ["사상구", "북구"], "pins": ["삼락생태공원", "구포시장"], "motif": "motif_navy.jpg", "ink": "#fff", "travel": "~1 h 40 min of travel"}, {"id": "saha", "name": "Saha", "ko": "사하 · 서구 · 다대포", "title": "Sunset Day", "titleKo": "바다 따라 노을로 끝나는 하루", "img": "seagull_guitar.png", "face": "seagull.png", "guide": "Kkiru", "color": "#cb1f2a", "span": "10:00 – 21:00", "stops": [{"t": "10:00", "cat": "Cable car", "name": "Songdo Marine Cable Car", "ko": "송도해상케이블카", "hood": "Songdo, Seo-gu", "line": "Cable car over the sea from Songdo Beach", "hours": "09:00–21:00 (Mar–Jun, Sep–Nov) · 22:00 Jul–Aug · 20:00 Dec–Feb · tickets until 30 min before close", "addr": "서구 송도해변로 171", "tel": "051-247-9900", "src": "Busan Air Cruise (official site)", "q": "송도해상케이블카", "photo": "songdo.jpg", "credit": "Photo: Michiel1972 / Wikimedia Commons (CC BY-SA 3.0) · Songdo Beach", "local": "The cable car crosses the sea from Songdo Beach toward Amnam Park, with two cabin types, Air Cruise and Crystal Cruise. Songdo was almost the only West Busan spot in Busan's top-20 tourist sites in a 2023 Korea Tourism Organization × Busan City review, so it is a good bridge between the famous and the local. Operation can stop early in bad weather."}, {"t": "11:45", "cat": "Village", "name": "Gamcheon Culture Village", "ko": "감천문화마을", "hood": "Gamcheon", "line": "Colorful hillside houses and alleys", "q": "감천문화마을", "photo": "gamcheon.jpg", "credit": "Photo: Bernard Gagnon / Wikimedia Commons (CC0)", "local": "Built in 1955 by about 4,000 Taegeukdo believers and war refugees, the houses step up the hillside in neat rows, and every alley connects to every other. A 2009 public art project turned the village into a gallery. A stamp route takes about 1 hour 20 minutes.", "go": {"mode": "transit", "min": 32, "text": "32 min · Bus 61, Songdo-ipgu → Gamcheon Culture Village, 11 stops (18 min walk to the stop)"}}, {"t": "13:30", "cat": "Lunch", "name": "Jaeseong Milmyeon", "ko": "재성밀면 감천직영점", "hood": "Gamcheon", "line": "Busan cold wheat noodles", "menu": "물밀면 · 비빔밀면", "hours": "영업시간 확인 필요", "addr": "사하구 감천로 61", "tel": "051-204-9925", "src": "Saha-gu Office · 부산의 맛", "q": "재성밀면 감천직영점", "photo": "jaeseong.jpg", "credit": "Photo: Naver blog godduddk (blog.naver.com/godduddk/221598958245)", "local": "Milmyeon is Busan's own cold noodle, made with wheat. Saha-gu lists this shop as a Taste of Busan pick, close to Gamcheon.", "go": {"mode": "transit", "min": 10, "text": "10 min · Village bus Saha-gu 1, 8 stops"}}, {"t": "15:30", "cat": "View", "name": "Amisan Observatory", "ko": "아미산전망대", "hood": "Dadae", "line": "The river mouth from above", "q": "아미산전망대", "photo": "amisan.jpg", "credit": "Photo: VisitBusan", "local": "From the top floor you see the sandbars the river built at its mouth: Doyodeung, Sinjado, Baekhapdeung, Jangjado. Floor 2 explains how the delta formed, and floor 3 has telescopes and a café. Open Tue–Sun 09:00–18:00. Eulsukdo, the migratory bird island (Natural Monument No. 179), is just upriver if you have extra time.", "go": {"mode": "transit", "min": 43, "text": "43 min · Village bus Saha-gu 15, Gamcheon-gogae → Molundae Apt, 27 stops"}}, {"t": "17:00", "cat": "Sunset", "name": "Dadaepo Beach", "ko": "다대포해수욕장", "hood": "Dadae", "line": "Sunset beach, BUROCK's home before Samrak", "q": "다대포해수욕장", "photo": "dadaepo.jpg", "credit": "Photo: Y.c.jang / Wikimedia Commons (CC BY-SA 3.0)", "local": "A beach where the Nakdong meets the sea, with dunes and a lagoon still forming. BUROCK was held here before it moved to Samrak in 2011. The old net-hauling song Dadaepo Hurisori comes from this shore.", "go": {"mode": "walk", "min": 19, "text": "Walk 19 min · 1.2 km downhill"}}, {"t": "18:00", "cat": "Dinner", "name": "Dadaepo Halmaejip", "ko": "다대포 할매집", "hood": "Dadae", "line": "Sea-view bar, house makgeolli and seafood", "hours": "화–금 16:00–23:30 · 토–일 14:00–23:30 · 월 휴무", "addr": "사하구 몰운대1길 55", "tel": "051-263-2801", "src": "VisitBusan", "q": "다대포 할매집", "photo": "halmae.jpg", "credit": "Photo: VisitBusan", "local": "A street-style bar facing the waves, with outdoor and rooftop seats for the sunset. House makgeolli, and seafood bought straight from the boats. Dishes are limited each day.", "go": {"mode": "walk", "min": 2, "text": "Walk 2 min · 184 m"}}], "districts": ["사하구", "서구"], "pins": ["송도", "감천문화마을", "다대포"], "motif": "motif_red.jpg", "ink": "#fff", "nudge": {"서구": [-2, -14]}, "travel": "~2 h 10 min of travel"}, {"id": "oldtown", "name": "Old Town", "ko": "중구 · 영도", "title": "Harbor Day", "titleKo": "항구 골목에 남은 옛 부산", "img": "mackerel_bass.png", "face": "mackerel.png", "guide": "Ana", "color": "#f2b417", "span": "09:30 – 24:00", "stops": [{"t": "09:30", "cat": "Breakfast", "name": "Bugwang Dwaejigukbap", "ko": "부광돼지국밥", "hood": "Daecheong-dong", "line": "Three generations of pork soup", "menu": "돼지국밥 ₩10,000", "hours": "09:30–19:30 · 일요일·명절 휴무", "addr": "중구 대청로141번길 15-1", "src": "Taste of Busan 2025", "q": "부광돼지국밥", "photo": "bugwang.jpg", "credit": "Photo: Taste of Busan 2025 (Busan City)", "local": "Three generations, over 40 years. Kimchi and kkakdugi are made in-house."}, {"t": "10:30", "cat": "Book street", "name": "Bosu-dong Book Street", "ko": "보수동 책방골목", "hood": "Bosu-dong", "line": "Korea's only remaining used-book street", "hours": "가게별 상이 (20:00 전후 마감) · 첫째·셋째 화요일 휴무", "addr": "중구 보수동1가 일대 (국제시장 건너편 대청로 사거리)", "access": "자갈치역 3번 출구 도보 11분", "src": "VisitBusan · Busan Future Heritage", "q": "보수동책방골목", "photo": "bosu.jpg", "credit": "Photo: Mobius6 / Wikimedia Commons (CC BY-SA 4.0)", "local": "In 1950, a refugee couple from the North laid out boxes under the eaves and sold old magazines and used books. Students from the tent schools on the hill above walked this alley every day, and by the 1970s–80s about 70 bookshops lined it. Busan City lists it as future heritage: the only used-book street left in Korea. Used books here are often 40–70% off.", "go": {"mode": "walk", "min": 15, "text": "Walk 15 min · 932 m"}}, {"t": "11:30", "cat": "Market", "name": "BIFF Square · Gukje Market", "ko": "BIFF광장 · 국제시장", "hood": "Nampo", "line": "Film street, then the market refugees built after 1945", "q": "국제시장", "hours": "국제시장 09:00–20:00 · 일요일 휴무", "addr": "중구 신창로4가 일원", "src": "VisitKorea", "photo": "biff.jpg", "credit": "Photo: Christophe95 / Wikimedia Commons (CC BY-SA 4.0)", "local": "BIFF Square is the film street of Busan's old downtown, with market snacks like seed hotteok. Across the road, Gukje Market began in 1945 as a 'dottegi' market where returnees sold goods by the bundle, and it kept refugees alive during the war. Use the second-floor bridges to find your way.", "go": {"mode": "walk", "min": 3, "text": "Walk 3 min · 251 m"}}, {"t": "12:45", "cat": "Lunch", "name": "Mackerel Research Institute", "ko": "고등어연구소 본점", "hood": "Jungang-dong", "line": "The mackerel's own pick", "menu": "고태솥밥+오차즈케 ₩10,900 · 고등어온소바 ₩10,900", "hours": "11:00–15:00 / 17:00–21:30 · 명절 휴무", "addr": "중구 중앙대로 79-1", "src": "Taste of Busan 2025", "q": "고등어연구소 본점", "photo": "mackerel.jpg", "credit": "Photo: Taste of Busan 2025 (Busan City)", "local": "Mackerel is Busan's city fish. This place researched how to remove the fishy taste and serves Japanese-style mackerel dishes: stone-pot rice, warm soba, pressed sushi.", "go": {"mode": "walk", "min": 15, "text": "Walk 15 min · 1.0 km"}}, {"t": "14:30", "cat": "Village", "name": "Huinnyeoul Culture Village", "ko": "흰여울문화마을", "hood": "Yeongseon-dong, Yeongdo", "line": "Cliffside refugee village over the sea", "hours": "Every day · free · a residential village, keep it quiet", "addr": "영도구 흰여울길 일대", "tel": "051-419-4067", "src": "VisitBusan · Yeongdo-gu Office", "q": "흰여울문화마을", "photo": "huinnyeoul.jpg", "credit": "Photo: Appleysj / Wikimedia Commons (CC BY-SA 4.0)", "local": "Korean War refugees built tiny box houses stacked on this steep sea cliff. Yeongdo-gu renovated the empty houses in 2011, and the 14 alleys now hold cafés, workshops and small bookshops. The name means 'white rapids': mountain streams once fell straight into the sea here. Walk the village (about 1 km, 20 min), then take the Piano Steps down to the Jeoryeong Coastal Trail. You can also find the filming spot of The Attorney (변호인).", "go": {"mode": "transit", "min": 21, "text": "21 min · Bus 508, Jungang Stn → Huinnyeoul, 9 stops"}}, {"t": "16:30", "cat": "Market · Dinner", "name": "Jagalchi Market", "ko": "자갈치시장", "hood": "Nampo", "line": "Busan's fish market by the port. Buy on 1F, eat on 2F.", "q": "자갈치시장", "photo": "jagalchi.jpg", "credit": "Photo: Bernard Gagnon / Wikimedia Commons (CC0)", "local": "Korea's largest seafood market. It began as fishermen's stalls on reclaimed land in the 1930s and grew with refugees after the war. The red-aproned 'Jagalchi ajime', many of them war widows, became its symbol.", "go": {"mode": "transit", "min": 19, "text": "19 min · Bus 6, Huinnyeoul → Nampo-dong, 8 stops"}}, {"t": "19:30", "cat": "Night market", "name": "Bupyeong Kkangtong Night Market", "ko": "부평깡통야시장", "hood": "Bupyeong-dong", "line": "Korea's first permanent night market, opened 2013", "hours": "시장 09:00–20:00 · 야시장 19:30–24:00", "addr": "중구 부평1길 48", "tel": "051-243-1128", "access": "자갈치역에서 도보 약 7분", "src": "Jung-gu Office", "q": "부평깡통야시장", "photo": "bupyeong.jpg", "credit": "Photo: Christophe95 / Wikimedia Commons (CC BY-SA 4.0)", "local": "Bupyeong opened in 1910 as Korea's first public market. It got the name kkangtong (can) from the US Army canned goods sold here after the war. In October 2013 it became Korea's first permanent night market, with stalls given to multicultural families and people with disabilities. There is also a fish cake street.", "go": {"mode": "walk", "min": 12, "text": "Walk 12 min · 719 m"}}], "districts": ["중구", "영도구"], "pins": ["국제시장", "자갈치시장", "흰여울"], "motif": "motif_yellow.jpg", "ink": "#0b3387", "travel": "~1 h 25 min of travel"}], "markets": [{"name": "Jagalchi Market", "ko": "자갈치시장", "gu": "중구", "day": "oldtown", "pin": "자갈치시장", "tag": "SEAFOOD", "line": "Korea's largest seafood market. Home of the red-aproned 'Jagalchi ajime', women who kept it running after the war.", "hours": "05:00–22:00 · 첫째·셋째 화요일 휴무", "src": "Busan City Future Heritage · VisitKorea", "q": "자갈치시장", "photo": "jagalchi.jpg", "credit": "Photo: Bernard Gagnon / Wikimedia Commons (CC0)", "origin": "Named after the pebble (jagal) shore that was here. After the Nambin land reclamation in the 1930s, small fishermen and their wives set up stalls on the new ground. Returnees after 1945 and refugees after 1950 joined them, and women widowed by the war became the red-aproned 'Jagalchi ajime'. It was registered as a market in 1972.", "enjoy": [["Buy downstairs, eat upstairs", "Pick live fish on the 1st floor, then take it to a 2nd-floor 'chojang-jip' restaurant and pay a per-person table fee."], ["Kkomjangeo (hagfish) grill", "Grilled hagfish is a Busan favorite. Look for the grill stalls beside the main building."], ["Harbor view on the 7th floor", "The observatory looks out over the South Port toward Yeongdo."], ["Dried-fish market", "About 150 Japanese-era shop buildings from 1934 still stand here."], ["Jagalchi Festival · October", "Running since 1992, under the dialect slogan 'Oiso! Boiso! Saiso!' (Come, look, buy!)."]], "shops": [{"k": "yeongdo", "name": "Yeongdo Sanghoe", "ko": "영도상회", "stall": "1F · No. 376", "known": "Live seafood stall. Pick your fish here, then eat it upstairs at a 2nd-floor restaurant. The sign over the tanks reads 영도수산.", "addr": "중구 자갈치해안로 52, 자갈치시장 1층 376호", "tel": "0507-1332-4322", "hours": "09:00–20:00 · market closed 1st, 3rd, 5th Tue", "src": "Busan City foreign-language menu (menu.busan.go.kr)", "q": "자갈치시장 영도상회", "credit": "Photo: 부산광역시 외국어 메뉴판"}, {"k": "songhak", "name": "Songhak Hoetjip", "ko": "송학횟집", "stall": "2F · No. 19", "known": "Raw-fish restaurant on the 2nd floor, looking out over the South Port. Bring fish from the 1st floor or order here.", "addr": "중구 자갈치해안로 52, 자갈치시장 2층", "tel": "051-253-3317", "hours": "09:00–21:00 · closed 1st, 3rd, 5th Tue", "src": "Busan City foreign-language menu (menu.busan.go.kr)", "q": "자갈치시장 송학횟집", "credit": "Photo: 부산광역시 외국어 메뉴판"}, {"k": "dalbongi", "name": "Dalbongi Hoetjip", "ko": "달봉이횟집", "stall": "2F · No. 18", "known": "Raw fish, then grilled fish and spicy maeuntang (fish stew) to finish.", "addr": "중구 자갈치해안로 52, 자갈치시장 2층", "tel": "051-256-3340", "hours": "09:00–21:00 · closed 1st, 3rd, 5th Tue", "src": "Busan City foreign-language menu (menu.busan.go.kr)", "q": "자갈치시장 달봉이횟집", "credit": "Photo: 부산광역시 외국어 메뉴판"}]}, {"name": "Gukje Market", "ko": "국제시장", "gu": "중구", "day": "oldtown", "pin": "국제시장", "tag": "SINCE 1945", "line": "Began as a 'dottegi' market after liberation and kept refugees alive during the Korean War.", "hours": "09:00–20:00 · 일요일 휴무", "src": "VisitKorea", "q": "국제시장", "photo": "gukje.jpg", "credit": "Photo: Hankook12 / Wikimedia Commons (CC0)", "origin": "After liberation in 1945, returnees and departing Japanese sold goods on an empty firebreak lot, bundles traded unopened. People called it the 'dottegi' market. It became the Free Market in 1948, filled with refugees during the Korean War (about 1,300 stalls by the early 1950s), and was later named Gukje (international) for the US Army and imported goods sold here.", "enjoy": [["Themed alleys", "Used-clothing, patbingsu (shaved ice), food, cosmetics and small-goods alleys."], ["Bridges on the 2nd floor", "Footbridges link the market buildings. Go up to find your way and look down on the stalls."], ["Film location", "The 2014 film Ode to My Father (국제시장, over 10 million viewers) was set around a shop here."], ["Bosu-dong Book Street", "Korea's only remaining used-book street is right across the road."]], "shops": [{"k": "seojinseop", "name": "Seojinseop Dwaeji Gukbap", "ko": "서진섭돼지국밥", "stall": "Inside Gukje Market", "known": "Pork-and-rice soup, sundae gukbap and boiled pork in generous portions. A VisitBusan 'old shop' pick.", "addr": "중구 광복로39번길 30-1", "tel": "051-254-5074", "hours": "Mon–Sat 09:00–20:00 · 2nd & 4th Sun until 17:00 · closed 1st, 3rd, 5th Sun", "src": "VisitBusan · Busan City foreign-language menu (menu.busan.go.kr)", "q": "서진섭돼지국밥", "credit": "Photo: 부산광역시 외국어 메뉴판"}]}, {"name": "Bupyeong Kkangtong Market", "ko": "부평깡통시장", "gu": "중구", "day": "oldtown", "pin": "부평깡통시장", "tag": "NIGHT MARKET", "line": "Named for the US Army canned goods sold here. Korea's first permanent night market (2013). Fish cake street inside.", "hours": "09:00–20:00 · 야시장 19:30–24:00", "src": "Jung-gu Office", "q": "부평깡통야시장", "photo": "bupyeong.jpg", "credit": "Photo: Christophe95 / Wikimedia Commons (CC BY-SA 4.0)", "origin": "Opened in 1910 as Korea's first public market. After the war it sold canned goods from US Army bases, so people called it kkangtong (can) market. In the 1970s it was known for C-rations and imported goods.", "enjoy": [["Night market · 19:30–24:00", "A 110 m lane between gates 3 and 4: 11 local food stalls, 6 multicultural stalls (Japanese, Filipino and more) and 13 clothing stalls."], ["Fish cake street", "Fish cake shops gathered here in the 1960s after Busan's first fish cake factory opened nearby."], ["Danpatjuk street", "A lane of red bean porridge shops between the import stores. The Kkangtong style is Japanese-influenced: grilled injeolmi (rice cake) on top. In summer, try the patbingsu."], ["Porridge alley and hanbok street", "Porridge shops here are often run by the second generation: red bean, pumpkin, sesame, pine nut and mung bean porridge."], ["Jokbal and gopchang alleys", "A few steps outside the market."], ["Street shows", "Magic and guitar performances at the entrance twice a day."]], "shops": [{"k": "yubu", "name": "Kkangtong Golmok Halmae Yubu Jeongol", "ko": "깡통골목할매 유부전골 본점", "stall": "Near market gate 7", "known": "The original yubu jeongol: tofu pouches stuffed with glass noodles and vegetables, simmered in fish-cake broth. People line up to take it home.", "addr": "중구 부평3길 29", "tel": "051-245-1878", "hours": "10:00–18:00 (check before going)", "src": "Busan City 'Food Talking' · news 2025", "q": "깡통골목할매 유부전골 본점", "credit": "Photo: 부산광역시 (busan.go.kr)"}, {"k": "igane", "name": "Igane Tteokbokki", "ko": "이가네떡볶이", "stall": "Inside the market", "known": "Tteokbokki and tteok-twi (tteokbokki with fried snacks). A Taste of Busan pick, always busy. Closes before the night market opens.", "addr": "중구 부평1길 48 일대 (부평깡통시장)", "tel": "051-245-0413", "hours": "10:00–17:00 · closed Sun", "src": "Taste of Busan · VisitBusan", "q": "이가네떡볶이 부평", "credit": "Photo: VisitBusan · dish"}, {"k": "", "name": "Somunnan Juk", "ko": "소문난죽", "stall": "Porridge alley", "known": "Said to be the oldest porridge shop in the market, about 70 years. Red bean porridge ₩6,000, not too sweet, with rice balls; also mung bean and pumpkin porridge. Featured on MBN's 'Jeon Hyun-moo Plan' (2024).", "addr": "중구 중구로43번길 36", "tel": "051-244-7485", "hours": "Check before going", "src": "MBN broadcast via TV listing blog (2024) · not an official listing", "q": "소문난죽 부평", "credit": ""}]}, {"name": "Gupo Market", "ko": "구포시장", "gu": "북구", "day": "sasang", "pin": "구포시장", "tag": "5-DAY MARKET", "line": "About 400 years old. The 5-day market fills the alleys on dates ending in 3 and 8. Gupo noodles.", "hours": "08:00–20:00 · 점포별 상이", "src": "VisitBusan", "q": "구포시장", "photo": "gupo.jpg", "credit": "Photo: VisitBusan", "origin": "The market grew at Gupo ferry on the Nakdong, where farm goods from inland met seafood from the coast. Floods kept washing it out, so it moved to its current site after a riverbank was built in 1932. The 5-day market began in the 1930s and a permanent market opened in 1972.", "enjoy": [["Mukja (food) alley", "Gupo noodles, market gukbap, jokbal, porridge, handmade tofu and fried snacks."], ["12 themed alleys", "Including the herb alley and the seafood alley."], ["Kkwabaegi and noodles", "Twisted doughnuts as a snack, then a bowl of Gupo noodles."], ["Golden Sunset Bridge", "From the market entrance, a footbridge crosses the river to Hwamyeong Eco Park, a sunset spot."]], "shops": [{"k": "iwonhwa", "name": "Iwonhwa Gupo Guksi", "ko": "이원화구포국시", "stall": "Inside Gupo Market", "known": "Gupo noodles: warm anchovy-broth noodles ₩6,000, spicy mixed noodles ₩7,000.", "addr": "구포시장 안 (지도에서 확인)", "tel": "", "hours": "Market 08:00–20:00", "src": "VisitBusan (Oct 2026)", "q": "이원화구포국시", "credit": "Photo: VisitBusan · 조민경"}, {"k": "gangdaegam", "name": "Gang Daegam Son Kalguksu", "ko": "강대감손칼국수", "stall": "Market street", "known": "Handmade knife-cut noodle soup. The sign also lists jjajangmyeon, milmyeon and kongguksu.", "addr": "북구 구포시장길 6", "tel": "051-334-3158", "hours": "Mon–Sat 11:00–20:00 · Sun 11:00–17:30", "src": "Busan City foreign-language menu (menu.busan.go.kr)", "q": "강대감손칼국수", "credit": "Photo: 부산광역시 외국어 메뉴판"}, {"k": "badasan", "name": "Badasan Gomjangeo", "ko": "바다산곰장어", "stall": "Seafood alley", "known": "Live hagfish, usually grilled. Small ₩40,000 to extra-large ₩80,000; fried rice after ₩2,000. Look for the '산곰장어' awning.", "addr": "북구 구포시장길 41", "tel": "051-332-4896", "hours": "10:00–21:30", "src": "Busan City foreign-language menu (menu.busan.go.kr)", "q": "바다산곰장어", "credit": "Photo: 부산광역시 외국어 메뉴판"}]}, {"name": "Bujeon Market", "ko": "부전시장 (부전마켓타운)", "gu": "부산진구", "day": "", "pin": "부전시장", "tag": "MORNING MARKET", "line": "", "hours": "07:00–19:00 · 가게별 상이", "src": "VisitBusan · Busan City (Dynamic Busan) · 전국별별시장", "q": "부전마켓타운", "photo": "bujeon.jpg", "credit": "Photo: VisitBusan", "origin": "Built by refugees who gathered here to make a living after the Korean War, and registered as a market in 1975. In 2006 six markets joined as 'Bujeon Market Town', including a ginseng market and a dawn farm-and-fish market, so the whole area is huge. Busan people still just say Bujeon Market. Bujeon Station (Line 1) exit 1 is 3 minutes away.", "enjoy": [["Dawn trading", "Farmers and fishers sell directly from early morning, so it is busiest and freshest before noon."], ["Ginseng market on 2F", "A large ginseng wholesale market: fresh, dried and red ginseng. One of only two specialized ginseng markets in Korea, with Seoul's Gyeongdong Market."], ["Freshwater fish alley", "Eel, carp, loach and more. Said to be the only freshwater fish market alley in Korea."], ["Market food everywhere", "Bindaetteok, jeon, gukbap, kalguksu, fish cakes and fried snacks, day and night."], ["Porridge alley and summer drinks", "Porridge and blood-sausage soup year round; cold kongguk (soy milk soup) and sikhye in summer."]], "shops": [{"k": "", "name": "Myeongnan Gimbap", "ko": "명란김밥", "stall": "Bujeon Market 1F", "known": "Gimbap with pollock roe and thin egg, about ₩4,000 a roll; also tuna, spicy pepper and flying-fish roe rolls. Featured on SBS 'Master of Living'. Takeout only, the line moves fast.", "addr": "부산진구 중앙대로783번길 23, 부전시장 내", "tel": "010-8988-2148", "hours": "07:30–17:30 (until sold out)", "src": "SBS broadcast listing · Siksin (2025.11) · not an official listing", "q": "부전시장 명란김밥", "credit": ""}, {"k": "", "name": "Bujeon Tteokgalbi", "ko": "부전떡갈비", "stall": "No. 119", "known": "Handmade pork tteokgalbi (grilled patties), often the longest line in the market. About ₩11,000 for 5 pieces. Takeout.", "addr": "부산진구 중앙대로783번길 23, 119호", "tel": "", "hours": "10:00–18:00 (until sold out)", "src": "Visitor reviews (2026) · not an official listing", "q": "부전떡갈비", "credit": ""}, {"k": "", "name": "Wangppolttegi (main branch)", "ko": "부전시장 왕뽈떼기 본점", "stall": "Across from Gaya Church", "known": "Cod cheek soup (daegu ppoltang) from ₩7,000 at lunch; mixed with roe ₩9,000. Dinner sets from 17:00.", "addr": "부산진구 부전로152번길 51, 1층", "tel": "", "hours": "Tue–Sun 11:00–20:30 · break 15:00–17:00 · closed Mon", "src": "Visitor reviews (2026) · not an official listing", "q": "부전시장 왕뽈떼기 본점", "credit": ""}, {"k": "", "name": "Hangeul Hoe Chobap", "ko": "한글회초밥", "stall": "Nos. 57–65", "known": "Market sushi to go, about ₩10,000 for 10 pieces. Eat it at the rest areas in the market.", "addr": "부산진구 중앙대로783번길 23, 57·59·61·63·65호", "tel": "", "hours": "Check before going", "src": "Visitor reviews (2026) · not an official listing", "q": "부전시장 한글회초밥", "credit": ""}]}, {"name": "Gijang Market", "ko": "기장시장", "gu": "기장군", "day": "", "pin": "기장시장", "tag": "SEASONAL", "line": "Seaweed and anchovy in spring, Gijang hairtail in autumn. Locals shop here for cheaper seafood.", "hours": "06:00–21:00 · 매월 마지막 화요일 휴무", "src": "Gijang-gun Office", "q": "기장시장", "photo": "gijang.jpg", "credit": "Photo: Gijang-gun Office", "origin": "The market of Gijang-eup, the fishing town on Busan's east coast. It became a modern permanent market in 1985.", "enjoy": [["Spring: seaweed and anchovy", "Gijang seaweed and anchovy fill the market in spring."], ["Autumn: Gijang hairtail", "For about two months around Chuseok, Gijang hairtail is the star."], ["Local prices", "Seafood here is cheaper than at Jagalchi, so locals shop here."]], "shops": [{"k": "hakri", "name": "Hakri Chojang", "ko": "학리초장", "stall": "Zone E · No. 231", "known": "Buy fish at a stall, eat it here. Table setting ₩6,000 per person; grilled eel or spicy hagfish ₩7,000 per person; maeuntang ₩8,000–10,000.", "addr": "기장군 기장읍 읍내로104번길 16 (기장시장)", "tel": "051-721-1171", "hours": "11:00–21:00 · closed 2nd & 4th Tue", "src": "Busan City foreign-language menu (menu.busan.go.kr)", "q": "기장시장 학리초장", "credit": "Photo: 부산광역시 외국어 메뉴판"}, {"k": "thankyou", "name": "Thank You Chojang-jip", "ko": "땡큐초장집", "stall": "B1 · No. 19, 30", "known": "Live fish by the kilo, served as raw fish: rockfish, red sea bream and sea bass ₩35,000/kg.", "addr": "기장군 기장읍 읍내로104번길 16, 지하1층", "tel": "051-722-4925", "hours": "11:00–21:00 · closed 2nd & 4th Tue", "src": "Busan City foreign-language menu (menu.busan.go.kr)", "q": "기장시장 땡큐초장집", "credit": "Photo: 부산광역시 외국어 메뉴판"}, {"k": "gyeongja", "name": "Gyeongja Hoe Center", "ko": "경자회센타", "stall": "B1 · No. 8", "known": "Raw fish by the kilo: flatfish ₩35,000–40,000, assorted ₩30,000, conger eel ₩30,000.", "addr": "기장군 기장읍 읍내로104번길 16, 지하", "tel": "051-721-9767", "hours": "11:00–21:00 · closed 2nd & 4th Tue", "src": "Busan City foreign-language menu (menu.busan.go.kr)", "q": "기장시장 경자회센타", "credit": "Photo: 부산광역시 외국어 메뉴판"}]}], "events": [{"slug": "tongsinsa", "month": 4, "mon": "APR", "ko": "조선통신사 축제", "name": "Joseon Tongsinsa Festival", "venue": "Busan Port North Port Park, Gwangbok-ro", "last": "2026.4.24–4.26", "next": "2027 TBA", "stats": [["~500", "people in the envoy procession (planned)"], ["~1,000", "in the paper-plane contest at North Port (planned)"]], "why": "Recreates the procession of the Joseon envoys to Japan, whose records are on UNESCO's Memory of the World list. Free.", "src": "Busan Cultural Foundation via The Preview, 국제신문 (Apr 2026)", "poster": "tongsinsa.jpg", "credit": "Poster: 부산문화재단"}, {"slug": "eobang", "month": 6, "mon": "JUN", "ko": "광안리어방축제", "name": "Gwangalli Eobang Festival", "venue": "Gwangalli Beach, Suyeong Historical Park", "last": "24th · 2026.6.12–6.14", "next": "2027 TBA", "stats": [["8 yrs", "in a row as a national Culture & Tourism Festival"], ["44", "programs planned"]], "why": "Built on Suyeong's fishing-village folk culture: the naval commander's parade, a folk village, and catching live fish by hand on the beach with Gwangan Bridge behind. Free.", "src": "연합뉴스 2026.6.10 · 수영구축제위원회", "poster": "eobang.jpg", "credit": "Poster: 수영구 / 수영구축제위원회"}, {"slug": "seafestival", "month": 8, "mon": "AUG", "ko": "부산바다축제", "name": "Busan Sea Festival", "venue": "Dadaepo Beach", "last": "30th · 2026.8.7–8.13", "next": "2027 TBA", "stats": [["30th", "edition in 2026"], ["2,000", "seats in the beach pocha 'Dadaepocha' (planned)"]], "why": "Busan's main summer festival, set against the Dadaepo sunset, with an opening fireworks show from the sea and free concerts. Same beach as the Sunset Day.", "src": "부산축제조직위원회 (Aug 2026)", "poster": "seafestival.jpg", "credit": "Poster: 부산광역시 / 부산축제조직위원회", "day": "saha"}, {"slug": "burock", "month": 10, "mon": "OCT", "ko": "부산국제록페스티벌", "name": "BUROCK", "venue": "Samrak Ecological Park", "last": "2026.10.2–10.4", "next": "2027 confirmed · dates TBA", "stats": [["80,000", "paid visitors in 2026, a record"], ["81%", "came from outside Busan"], ["99", "acts on the 2026 lineup"]], "why": "Started in 2000 and now in its 27th year, in a riverside park in West Busan. The guide starts here.", "src": "부산일보 2026.10.11 · 부산일보 2026.9.7", "poster": "burock.jpg", "credit": "Poster: 부산국제록페스티벌 (official)", "day": "sasang"}, {"slug": "biff", "month": 10, "mon": "OCT", "ko": "부산국제영화제", "name": "Busan International Film Festival", "venue": "Busan Cinema Center, Centum City + 8 theaters", "last": "31st · 2026.10.6–10.15", "next": "2027 TBA", "stats": [["277,027", "total attendance"], ["200,043", "film audience, the highest since 2015"], ["246", "films from 59 countries in the official selection"]], "why": "2026 was BIFF's first year as a FIAPF 'A-list' festival, with about 300 Q&A sessions where audiences meet the filmmakers.", "src": "BIFF 2026 report · 연합뉴스 2026.10.15", "poster": "biff.jpg", "credit": "Poster: © Busan International Film Festival"}, {"slug": "dongnae", "month": 10, "mon": "OCT", "ko": "동래읍성역사축제", "name": "Dongnae Eupseong History Festival", "venue": "Dongnae Eupseong north gate, Myeongnyun 1beonga", "last": "32nd · 2026.10.16–10.18", "next": "2027 expected · dates TBA", "stats": [["57", "programs in 2026"], ["1st", "of 30 Busan festivals in the 2025 expert review"], ["240,000+", "visitors in 2024 (Dongnae-gu estimate)"]], "why": "Restages the 1592 battle of Dongnaeseong on the real site as an outdoor musical, plus a three-strand tug-of-war and a Joseon market paid in old coins.", "src": "TV부산 2026.9.21 · 연합뉴스 2026.2.8 · 국제신문 2025.2.27", "poster": "dongnae.jpg", "credit": "Poster: 동래구 / 동래읍성역사축제추진위원회"}, {"slug": "fireworks", "month": 11, "mon": "NOV", "ko": "부산불꽃축제", "name": "Busan Fireworks Festival", "venue": "Gwangalli Beach, Igidae, Dongbaekseom", "last": "20th · 2025.11.15", "next": "21st · 2026.11.7 (Sat)", "stats": [["1.17M", "visitors in 2025 (Busan City estimate)"], ["90,000", "fireworks fired"], ["13", "launch barges at sea"]], "why": "A free citywide night show over Gwangan Bridge and the sea, watched from the beach.", "src": "부산일보 2025.11.15 · busanfireworks.com", "poster": "fireworks.jpg", "credit": "Poster: 부산광역시 / 부산축제조직위원회"}], "story": [{"y": "2000", "place": "Gwangalli Beach", "ko": "광안리해수욕장", "text": "The 1st BUROCK opens on a special stage on the beach (July 15–17), free to all. A city-run rock festival was a first in Korea at the time.", "src": "Wikipedia (ko) · 국제신문 2017.4.2"}, {"y": "2002–2010", "place": "Dadaepo Beach", "ko": "다대포해수욕장", "day": "saha", "text": "Noise complaints push the festival west to Dadaepo. These years became a holy ground for thrash metal and hardcore. At high tide the sea came right up to the front of the stage, and typhoons sometimes pushed the dates back.", "src": "Wikipedia (ko) · 뉴시스 2026.10.10"}, {"y": "2011", "place": "Samrak Ecological Park", "ko": "삼락생태공원", "day": "sasang", "text": "After electrocution risks at Dadaepo, the 12th edition moves inland to the Nakdong riverside. Free from the noise and time limits of the beaches, Samrak became BUROCK's own 'liberated zone' for bands and crowds.", "src": "국제신문 2017.4.2 · 국제신문 2026.7.21"}, {"y": "2019", "place": "20th edition", "ko": "20회 · 유료화", "text": "After 19 free years, BUROCK becomes a paid festival (2-day pass ₩88,000) to bring bigger international headliners. The first paid years had growing pains, but local sponsors such as Daesun Brewing stayed on.", "src": "부산축제조직위원회 2019.5.13 · 뉴시스 2026.10.10"}, {"y": "2025", "place": "25th edition", "ko": "25회", "text": "About 70,000 visitors, including 7,000 at 'Road to BU-ROCK' warm-up shows in Seoul, Busan, Jeonju and Taipei. Reusable containers cut the festival's waste.", "src": "부산일보 2025.9.29"}, {"y": "2026", "place": "27th year", "ko": "27년째", "day": "sasang", "text": "A record 80,000 paid visitors, 81% from outside Busan. A neighborhood women's association from an apartment 700 m away sold out its gukbap and became the 'food headliner', and Bu-long Night at Sasang Indie Station kept the crowd in West Busan after the shows. Named a national Pre-Global Festival.", "src": "부산일보 2026.10.11 · korea.kr 2026.10.13"}], "essentials": [{"slug": "yonggungsa", "name": "Haedong Yonggungsa Temple", "ko": "해동용궁사", "gu": "기장군", "tag": "TEMPLE BY THE SEA", "text": "A temple built right on the coastal rocks. The path in passes the 12 zodiac statues and 108 steps through pines. Keep your voice down and use the side doors of the main hall.", "hours": "04:30–19:20 (last entry 18:50) · free", "access": "Haeundae Stn exit 7 → bus 181/100, or Osiria Stn exit 1 → bus 139", "src": "VisitBusan · temple website", "q": "해동용궁사", "credit": "Photo: Londenp / Wikimedia Commons (CC BY-SA 3.0)"}, {"slug": "beomeosa", "name": "Beomeosa Temple", "ko": "범어사", "gu": "금정구", "tag": "SINCE 678", "text": "Founded by the monk Uisang in 678, one of the three great temples of Yeongnam. Its low Iljumun gate makes you bow as you enter. A working monastery with temple stays.", "hours": "08:00–17:00 · free", "access": "Beomeosa Stn (Line 1) exit 5 or 7 → bus 90", "src": "VisitBusan", "q": "범어사", "credit": "Photo: Basile Morin / Wikimedia Commons (CC BY-SA 4.0)"}, {"slug": "haeundae", "name": "Haeundae & Dalmaji Hill", "ko": "해운대 & 달맞이길", "gu": "해운대구", "tag": "BEACH", "text": "A 1.5 km white-sand beach with over 10 million summer visitors. From Mipo at its east end, the Haeundae Beach Train runs 4.8 km along the old Donghae Nambu Line rails to Songjeong, the sea right outside the window (about 25 min one way). Walk up Dalmaji-gil toward evening for the moonrise it is named for.", "hours": "Beach always open · Beach Train 09:00–19:00 (Nov–Feb), later in summer", "access": "Haeundae Stn (Line 2) exit 5, 15 min walk · Beach Train from Mipo Station", "src": "VisitBusan · Haeundae Blueline Park", "q": "해운대해수욕장", "credit": "Photo: Korea Tourism Organization (KOGL Type 1)"}, {"slug": "dongbaek", "name": "Dongbaekseom Island", "ko": "동백섬", "gu": "해운대구", "tag": "COASTAL WALK", "text": "A pine-covered headland at the west end of Haeundae Beach, once an island and still called one. A 950 m coastal deck passes the bronze mermaid statue, a short suspension bridge and a white lighthouse, with Gwangan Bridge across the water. Nurimaru APEC House, venue of the 2005 APEC summit, sits on the point.", "hours": "Walkway always open · Nurimaru 09:00–18:00, closed 1st Mon · free", "access": "Dongbaek Stn (Line 2) exit 1, ~20 min walk · or walk west along Haeundae Beach", "src": "VisitBusan", "q": "동백섬", "credit": "Photo: Michiel1972 / Wikimedia Commons (CC BY-SA 3.0)"}, {"slug": "gwangalli", "name": "Gwangalli & Gwangan Bridge", "ko": "광안리 & 광안대교", "gu": "수영구", "tag": "NIGHT VIEW", "text": "The city's beach, facing the 7.4 km Gwangan Bridge that lights up after dark. The Busan Fireworks Festival is launched from here every autumn. Suyeong Yaryu and Eobang-nori also come from this bay.", "hours": "Always open · free", "access": "Gwangan Stn (Line 2) exit 5, 13 min walk", "src": "VisitBusan · Encyclopedia of Korean Culture", "q": "광안리해수욕장", "credit": "Photo: lumoplank / Wikimedia Commons (CC0)"}, {"slug": "taejongdae", "name": "Taejongdae", "ko": "태종대", "gu": "영도구", "tag": "SEA CLIFFS", "text": "Sea cliffs and wave-cut rock at the tip of Yeongdo, a national Scenic Site and part of Busan Geopark. Ride the Danubi train to the observatory, then walk down to the 1906 lighthouse. Pairs well with Harbor Day (same island as Huinnyeoul).", "hours": "Park open early to midnight · Danubi train closed Mon", "access": "Nampo Stn exit 6 → bus 8 or 30", "src": "VisitBusan · Busan Geopark", "q": "태종대", "credit": "Photo: *intacto / Wikimedia Commons (CC BY 2.0)", "pair": "oldtown"}]};
+const A = f => (window.ASSETS && window.ASSETS[f]) || 'assets/' + f;
+const ICON = {
+  culture:'<svg viewBox="0 0 32 32" fill="none" stroke="#ec9c00" stroke-width="2"><rect x="4" y="8" width="24" height="17" rx="2"/><path d="M4 13h24M9 8l3 5M16 8l3 5M23 8l3 5"/></svg>',
+  trad:'<svg viewBox="0 0 32 32" fill="none" stroke="#ec9c00" stroke-width="2"><path d="M7 7c6-3 12-3 18 0v9c0 6-4 10-9 10s-9-4-9-10z"/><circle cx="12" cy="14" r="1.6"/><circle cx="20" cy="14" r="1.6"/><path d="M12 20c2.5 2 5.5 2 8 0"/></svg>',
+  star:'<svg viewBox="0 0 32 32" fill="none" stroke="#ec9c00" stroke-width="2"><path d="M16 4l3.6 7.6 8.2 1-6 5.7 1.5 8.2L16 22.6 8.7 26.5l1.5-8.2-6-5.7 8.2-1z"/></svg>',
+  market:'<svg viewBox="0 0 32 32" fill="none" stroke="#ec9c00" stroke-width="2"><path d="M4 12 7 5h18l3 7M4 12h24M4 12c0 2 1.5 3.5 3.5 3.5S11 14 11 12c0 2 1.5 3.5 3.5 3.5S18 14 18 12c0 2 1.5 3.5 3.5 3.5S25 14 25 12c0 2 1.5 3.5 3 3.5M6 16v11h20V16M13 27v-6h6v6"/></svg>',
+  home:'<svg viewBox="0 0 32 32" fill="none" stroke="#ec9c00" stroke-width="2"><path d="M5 15 16 6l11 9M8 13v13h16V13"/></svg>'
+};
+const RI = {
+  clock:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+  pin:'<svg viewBox="0 0 24 24"><path d="M12 21s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>',
+  menu:'<svg viewBox="0 0 24 24"><path d="M6 3v8a3 3 0 0 0 6 0V3M9 3v18M17 3c-2 2-2 7 0 9v9"/></svg>',
+  tel:'<svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>',
+  train:'<svg viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="14" rx="3"/><path d="M6 11h12M9 21l1.5-4M15 21l-1.5-4"/></svg>'
+};
+
+const M = {"W": 360.0, "H": 314, "shapes": {"중구": {"busan": true, "d": "M178.7,211.9L181.8,215.0L184.0,215.7L183.7,217.4L185.5,218.3L185.9,219.4L187.2,218.9L185.3,220.2L183.2,218.7L182.9,219.6L185.2,221.3L184.4,222.5L181.9,220.7L183.0,223.7L181.6,226.3L174.7,227.1L171.8,222.5L172.6,217.3L174.5,215.8L175.5,216.3L175.4,212.3L178.7,211.9Z", "eng": "Jung-gu"}, "서구": {"busan": true, "d": "M161.1,194.4L164.0,194.5L168.3,197.0L171.8,196.5L174.3,197.3L174.5,205.3L173.5,209.9L175.4,212.3L175.8,214.7L175.5,216.3L174.5,215.8L172.6,217.3L171.6,221.5L174.7,227.1L174.0,228.8L175.0,234.9L173.7,241.6L170.6,241.2L169.0,243.4L171.6,246.6L172.3,252.3L168.7,255.9L167.8,259.2L165.1,260.0L165.8,259.4L164.0,253.4L165.4,251.5L162.0,245.5L161.4,240.0L163.5,239.9L165.5,241.3L167.4,230.6L167.3,228.6L165.5,225.8L163.1,224.3L165.0,219.7L161.3,216.3L161.0,214.1L159.9,213.3L160.3,211.1L157.9,209.1L158.7,206.2L160.8,204.2L160.3,198.8L161.3,196.7L156.2,193.8L159.7,193.5L161.1,194.4Z", "eng": "Seo-gu"}, "동구": {"busan": true, "d": "M189.2,191.4L190.7,192.5L193.6,192.1L194.7,193.1L198.0,193.0L199.0,201.3L198.2,203.6L192.9,210.5L190.6,208.6L192.4,206.8L192.4,205.0L190.8,204.7L189.2,206.3L188.3,208.5L192.4,212.0L191.8,212.8L189.2,210.8L187.5,211.6L189.6,213.5L189.6,214.6L186.9,218.1L185.5,218.3L183.6,216.8L184.0,215.7L181.8,215.0L178.4,211.7L175.4,212.3L173.7,210.6L174.3,197.3L179.1,196.2L182.0,194.3L182.5,190.9L183.7,189.5L187.0,189.8L189.2,191.4Z", "eng": "Dong-gu"}, "영도구": {"busan": true, "d": "M196.5,223.0L196.1,225.5L197.6,225.3L200.4,227.0L205.3,233.1L206.5,233.5L207.1,235.3L206.1,236.2L207.0,237.3L209.1,236.1L209.4,234.6L209.4,236.4L207.0,237.7L209.5,242.5L210.9,242.8L215.1,238.7L217.2,238.6L216.4,241.5L214.0,243.5L211.7,244.3L211.0,243.3L207.4,245.3L208.1,246.5L210.0,246.5L212.3,251.8L217.0,253.8L214.6,260.4L211.4,261.8L209.1,260.9L207.9,256.5L205.8,253.5L204.0,253.3L201.8,254.8L201.0,253.4L198.2,252.6L198.3,247.5L196.3,246.6L193.4,246.7L183.0,238.5L179.6,235.1L177.7,229.7L177.9,228.4L181.0,229.4L180.6,228.0L182.1,228.7L183.1,227.2L185.6,226.2L188.5,227.4L187.8,225.5L188.9,225.1L190.4,226.4L189.8,224.2L194.8,223.1L196.7,220.9L196.5,223.0Z", "eng": "Yeongdo-gu"}, "부산진구": {"busan": true, "d": "M185.6,149.7L188.1,153.4L187.7,156.4L189.9,160.6L196.2,161.6L197.0,166.2L201.5,167.4L202.6,164.5L206.6,167.6L208.7,170.6L208.2,173.5L206.3,175.9L209.2,180.5L206.6,186.2L204.4,186.2L201.8,188.0L197.1,187.6L198.0,193.0L194.7,193.1L193.6,192.1L190.7,192.5L187.0,189.8L183.6,189.6L182.0,194.3L179.1,196.2L174.3,197.3L171.8,196.5L168.3,197.0L166.1,196.0L168.6,191.6L167.3,189.7L168.6,188.6L168.8,184.5L168.1,181.9L165.1,180.1L166.5,174.3L165.1,169.0L170.4,163.9L171.5,158.6L174.2,155.5L174.2,153.7L176.2,153.5L180.8,149.9L185.6,149.7Z", "eng": "Busanjin-gu"}, "동래구": {"busan": true, "d": "M206.4,130.2L208.4,131.9L208.7,131.1L211.9,133.0L209.8,136.4L212.5,136.1L222.8,141.6L225.9,141.7L226.4,145.7L228.1,148.1L229.4,148.4L228.4,153.2L228.9,161.5L226.8,157.6L216.1,154.5L212.0,154.0L209.4,152.5L207.8,149.8L206.3,149.7L203.9,150.7L202.5,152.8L197.9,154.0L196.7,155.5L190.8,155.1L188.1,153.4L185.6,149.7L185.6,148.0L189.4,143.9L189.9,139.6L192.7,136.1L194.6,130.8L196.3,130.0L200.3,130.8L206.4,130.2Z", "eng": "Dongnae-gu"}, "남구": {"busan": true, "d": "M216.9,178.2L220.4,185.2L221.7,190.5L221.0,192.1L226.5,197.2L228.2,197.2L226.6,197.5L225.1,199.4L227.5,197.7L230.5,200.0L227.4,205.3L232.2,198.6L233.3,200.0L233.4,203.8L234.4,206.3L237.3,210.4L236.3,217.7L234.1,222.5L234.9,223.4L234.3,224.5L229.1,223.8L227.6,221.7L226.1,223.1L228.5,225.5L225.4,230.2L228.2,225.5L226.1,223.4L221.1,228.0L222.8,229.9L219.4,230.5L216.7,228.5L215.4,217.0L213.8,217.4L213.8,221.2L204.4,221.2L198.6,217.1L199.8,217.8L201.1,215.7L200.4,214.6L201.1,213.5L203.7,211.4L202.7,209.9L202.0,210.9L201.1,210.3L203.2,207.4L201.3,206.7L200.5,207.7L198.5,206.8L199.0,196.3L197.3,191.6L197.1,187.6L201.8,188.0L204.4,186.2L206.6,186.2L209.2,180.5L213.0,178.6L215.3,179.1L216.9,178.2Z", "eng": "Nam-gu"}, "북구": {"busan": true, "d": "M179.9,92.4L187.6,93.9L184.8,98.0L184.5,101.6L181.0,104.0L187.2,106.6L188.3,108.0L186.3,110.8L186.5,114.0L188.9,115.6L189.4,118.5L185.5,124.8L185.7,126.4L190.5,128.3L193.4,128.3L195.5,127.0L196.3,130.0L194.6,130.8L189.9,140.8L189.4,143.9L185.6,148.0L185.6,149.7L180.8,149.9L176.2,153.5L174.2,153.7L174.2,155.5L171.5,158.6L169.1,157.6L163.0,157.8L159.2,156.8L158.8,155.4L154.9,152.8L153.1,153.9L151.3,152.3L152.0,149.2L151.2,148.2L154.5,144.2L155.8,139.7L157.6,124.7L156.7,122.4L166.6,99.6L167.7,96.6L166.9,94.2L171.8,92.5L179.9,92.4Z", "eng": "Buk-gu"}, "해운대구": {"busan": true, "d": "M253.3,121.8L253.5,122.5L256.8,122.8L261.8,128.5L259.3,138.0L256.5,140.4L256.3,144.5L262.2,148.6L263.7,147.6L268.0,150.8L271.1,151.4L271.8,152.7L270.4,156.7L271.4,157.1L274.5,156.5L278.1,150.1L280.9,149.7L284.9,151.6L284.9,160.4L285.8,162.7L281.5,164.5L279.7,166.6L278.7,175.5L277.3,179.0L272.9,179.5L271.1,181.9L268.9,183.1L266.7,182.8L262.2,179.8L257.0,180.2L253.5,181.6L252.0,185.2L250.1,185.6L250.8,182.1L252.2,180.6L249.1,181.9L247.9,184.1L245.0,182.8L244.4,181.4L245.3,180.2L243.4,178.2L240.4,177.3L238.5,178.2L235.5,175.2L230.5,164.3L228.5,157.4L229.4,148.4L228.1,148.1L226.4,145.7L225.9,141.7L227.1,139.9L231.4,138.5L230.0,133.2L230.3,131.4L232.3,129.9L236.1,129.0L238.3,125.9L238.6,122.9L241.4,122.1L244.4,118.2L246.9,111.3L249.4,113.9L249.3,114.9L254.1,116.2L253.3,121.8Z", "eng": "Haeundae-gu"}, "사하구": {"busan": true, "d": "M142.9,275.3L143.5,276.8L142.6,279.7L141.9,279.2L141.1,277.8L142.9,275.3ZM130.3,252.3L130.6,257.1L129.7,256.6L129.9,254.6L125.4,252.4L128.6,256.0L128.2,257.9L126.3,256.5L123.4,256.2L120.7,258.0L122.7,258.5L125.5,257.1L127.6,258.6L130.4,258.9L132.2,261.5L132.2,263.3L130.1,263.6L127.2,262.4L116.3,261.9L112.4,257.7L115.1,256.1L116.5,257.3L115.8,258.4L116.3,260.0L119.7,260.9L116.1,255.0L124.6,242.9L130.3,252.3ZM133.8,261.1L129.8,244.8L132.3,244.3L129.7,244.7L128.3,237.5L131.1,228.8L131.8,219.1L127.4,218.6L123.9,234.2L117.6,243.3L115.4,243.1L115.0,240.0L117.1,235.3L117.7,225.1L119.8,219.2L121.5,217.5L119.1,216.5L118.9,215.0L123.3,209.7L126.8,207.0L129.3,201.6L133.9,196.6L135.6,196.4L132.7,205.8L133.9,210.7L136.5,207.6L144.6,211.3L146.7,210.9L150.7,205.9L158.5,206.6L157.9,209.1L160.3,211.1L159.9,213.3L161.0,214.1L160.8,215.5L165.0,219.7L163.1,224.3L165.5,225.8L167.4,229.2L165.5,241.3L163.5,239.9L161.4,240.0L161.8,235.5L160.8,234.3L158.6,236.2L159.4,239.0L157.6,238.5L157.0,236.6L154.4,235.9L155.8,251.3L157.2,255.7L159.5,262.5L162.9,262.0L158.7,263.0L157.8,265.4L154.1,264.8L154.0,261.8L151.5,255.3L149.2,253.9L144.8,256.2L142.0,256.1L142.6,258.8L146.6,259.1L148.1,260.2L146.4,262.9L142.2,261.8L140.2,263.2L140.2,265.1L145.2,268.6L142.2,268.0L138.6,271.5L138.8,273.7L137.7,274.4L137.0,271.3L138.3,269.4L138.9,265.9L134.3,263.0L133.8,261.1Z", "eng": "Saha-gu"}, "금정구": {"busan": true, "d": "M228.4,72.1L229.7,73.3L233.5,73.6L237.7,75.9L238.6,79.5L234.4,88.6L235.5,90.7L232.3,99.1L233.1,103.1L240.0,104.0L240.7,105.0L243.6,104.1L243.0,108.8L246.9,111.3L244.4,118.2L241.4,122.1L238.6,122.9L238.3,125.9L236.1,129.0L232.3,129.9L230.3,131.4L230.0,133.2L231.4,138.5L227.1,139.9L225.9,141.7L222.8,141.6L212.5,136.1L209.8,136.4L211.9,133.0L208.7,131.1L208.4,131.9L205.5,129.7L197.0,130.6L195.5,127.0L193.4,128.3L190.5,128.3L185.7,126.4L185.5,124.8L189.4,118.5L188.9,115.6L186.5,114.0L186.3,110.8L188.3,108.0L187.2,106.6L181.0,104.0L184.5,101.6L184.8,98.0L187.8,93.7L188.5,90.8L191.5,88.0L190.5,85.2L194.3,78.5L201.5,78.9L204.0,81.5L211.2,73.6L213.9,72.1L217.7,72.1L223.0,69.8L228.4,72.1Z", "eng": "Geumjeong-gu"}, "강서구": {"busan": true, "d": "M17.7,286.9L20.7,287.3L22.2,290.6L19.7,290.8L18.7,288.4L15.8,289.7L15.9,287.4L17.7,286.9ZM104.5,252.5L109.5,252.4L109.6,253.7L107.9,256.6L101.6,253.9L101.2,251.9L104.3,251.1L104.5,252.5ZM92.7,252.6L93.6,251.1L105.2,256.9L109.6,257.6L107.9,260.1L105.6,257.9L103.1,257.1L92.5,254.8L89.5,253.0L89.0,251.4L90.3,250.1L92.7,252.6ZM84.4,251.1L79.5,250.4L71.9,247.3L72.3,245.9L78.4,244.7L88.8,247.4L88.7,249.7L84.4,251.1ZM64.9,253.5L65.8,251.9L64.9,251.1L59.1,248.3L59.2,243.4L59.5,242.7L60.9,243.0L62.4,246.7L66.6,247.5L70.1,247.0L72.4,250.7L67.0,252.1L64.9,253.5ZM111.1,240.6L110.7,242.8L110.1,241.9L107.1,242.1L100.9,245.8L99.5,245.6L104.9,242.5L110.2,241.3L107.0,240.5L111.1,240.6ZM64.5,254.2L67.1,259.6L67.8,267.2L66.4,273.2L63.0,275.6L63.2,277.9L60.7,284.1L57.9,286.9L57.7,290.4L61.6,293.4L59.4,298.5L61.0,300.5L59.5,300.7L54.6,306.8L53.5,307.0L55.0,302.6L53.2,301.8L49.9,302.6L50.2,297.9L48.7,297.2L47.7,295.3L50.7,295.1L51.0,293.3L48.9,291.7L52.6,290.8L53.2,288.4L50.9,286.0L43.3,282.7L40.4,282.7L39.5,280.7L41.0,280.0L44.1,281.0L45.9,279.4L45.5,276.3L42.5,276.0L41.2,274.9L41.3,273.3L43.2,273.6L43.8,272.8L44.1,268.8L40.1,263.2L36.3,263.0L35.2,261.9L34.7,258.3L38.6,257.3L34.9,257.9L34.4,258.7L31.1,258.7L31.1,252.5L33.2,251.9L33.7,254.0L40.2,252.7L39.7,248.7L56.4,245.3L56.4,240.6L43.6,240.7L43.6,236.6L47.9,236.6L49.8,235.5L49.8,234.5L52.7,234.2L54.1,231.4L56.2,233.4L57.8,233.6L58.1,248.3L56.5,255.4L59.3,258.2L62.2,258.2L64.6,256.4L64.5,254.2ZM49.2,226.2L51.0,222.5L57.8,222.6L62.0,219.5L62.8,214.1L59.5,211.9L58.5,209.7L59.8,206.6L56.7,201.6L53.3,202.9L51.4,200.8L46.0,199.6L41.3,194.7L40.7,192.2L37.9,192.7L37.7,189.1L34.2,184.5L32.7,181.3L33.3,180.2L37.0,180.6L40.2,178.8L41.9,179.9L46.4,179.0L50.6,182.0L53.4,182.4L58.6,179.8L62.8,180.6L64.9,175.6L73.1,173.0L77.7,173.4L80.2,175.4L80.6,177.2L78.8,180.2L77.3,179.3L76.4,180.5L80.3,186.3L82.6,185.7L83.2,185.4L82.2,183.9L82.0,180.2L85.9,179.5L86.3,178.1L83.6,175.4L82.8,171.3L80.8,170.0L81.4,168.6L86.1,170.3L85.5,165.1L86.4,162.6L83.0,158.2L83.1,154.8L79.5,148.1L84.8,141.8L86.4,141.5L89.3,138.5L95.7,139.4L102.7,136.8L100.7,134.3L103.3,132.2L103.2,133.9L103.9,132.2L105.3,132.5L107.8,136.6L109.9,137.0L115.5,134.3L121.9,128.9L124.5,128.1L127.2,130.4L132.2,130.4L149.0,127.1L155.2,123.9L156.7,122.4L157.6,124.7L154.9,143.2L147.6,151.8L138.1,158.3L136.4,160.8L134.0,196.6L130.0,200.6L126.8,207.0L123.3,209.7L118.9,215.0L119.1,216.5L117.6,216.4L116.2,222.4L116.0,229.4L112.7,229.6L105.7,233.2L105.2,239.1L104.5,239.7L94.7,239.7L94.7,234.1L96.3,229.3L97.2,229.5L98.0,215.4L101.1,210.5L96.2,208.8L91.2,218.1L90.1,231.8L87.5,237.1L88.0,239.4L78.9,237.8L79.8,235.8L80.8,236.7L79.8,232.4L79.8,235.0L78.2,236.5L61.1,236.5L60.3,237.3L58.1,232.6L56.2,232.6L49.9,225.7L49.2,226.2Z", "eng": "Gangseo-gu"}, "연제구": {"busan": true, "d": "M213.9,154.4L226.8,157.6L228.9,161.6L228.5,163.0L226.6,167.3L221.8,163.6L217.9,165.3L217.9,170.5L214.5,175.0L216.9,178.2L215.8,179.0L213.0,178.6L209.2,180.5L206.3,175.9L207.9,173.4L208.6,170.3L204.5,165.6L202.6,164.5L201.5,167.4L196.8,166.2L196.2,161.6L189.9,160.6L187.7,156.4L187.8,154.4L188.1,153.4L190.8,155.1L196.7,155.5L197.9,154.0L202.5,152.8L203.9,150.7L206.3,149.7L207.8,149.8L209.5,152.5L213.9,154.4Z", "eng": "Yeonje-gu"}, "수영구": {"busan": true, "d": "M228.9,159.5L235.5,175.2L237.1,176.1L241.2,182.3L240.4,183.2L234.5,184.3L234.2,183.3L232.5,183.4L230.0,185.8L228.9,188.6L230.6,190.2L230.1,194.3L226.5,197.2L223.5,194.8L221.0,192.1L221.7,190.5L220.4,185.2L214.5,175.0L217.9,170.5L217.9,165.3L221.8,163.6L226.6,167.3L228.9,161.6L228.9,159.5Z", "eng": "Suyeong-gu"}, "사상구": {"busan": true, "d": "M151.3,152.3L153.1,153.9L154.9,152.8L158.8,155.4L159.2,156.8L163.0,157.8L169.1,157.6L171.5,158.6L170.4,163.9L165.1,169.0L166.5,174.3L165.1,180.1L168.6,183.1L168.6,188.6L167.3,189.8L168.6,191.6L166.1,196.0L159.7,193.5L156.2,193.8L161.3,196.7L160.3,198.8L160.8,204.1L158.5,206.6L150.7,205.9L146.5,211.2L143.9,211.2L136.5,207.6L133.9,210.7L133.1,209.8L132.7,205.8L135.6,197.3L135.6,196.4L134.0,196.6L136.4,160.8L138.1,158.3L144.7,154.3L151.2,148.2L152.0,149.2L151.3,152.3Z", "eng": "Sasang-gu"}, "기장군": {"busan": true, "d": "M290.7,15.4L299.1,14.1L302.3,14.7L303.3,12.3L305.2,11.7L310.4,12.6L311.7,11.4L311.6,9.4L316.1,11.9L320.7,9.6L322.2,14.5L327.6,20.8L329.1,25.3L330.9,25.9L329.8,32.7L332.5,36.8L331.9,40.2L329.3,43.8L332.9,45.4L335.5,45.3L336.7,47.2L341.7,47.8L344.7,52.4L345.1,56.8L343.9,58.0L344.9,56.4L344.4,52.4L343.8,52.5L343.2,58.9L341.2,60.9L334.8,60.5L333.4,59.4L334.5,59.7L334.5,57.2L331.1,54.7L324.0,57.5L319.8,60.9L316.0,70.4L317.9,76.3L317.7,80.8L315.6,82.9L316.8,86.4L314.6,89.3L314.6,93.4L312.5,96.2L309.6,95.7L309.1,97.2L309.2,95.2L308.5,95.3L307.3,96.7L308.0,98.7L307.0,101.4L302.5,100.9L301.3,103.6L302.3,105.9L304.6,106.5L307.1,104.7L308.7,106.0L310.0,104.7L312.5,104.3L312.4,106.3L313.3,106.8L312.3,107.7L313.3,114.6L311.4,116.5L307.9,116.2L308.4,117.9L311.1,118.8L308.3,121.2L307.0,120.7L308.1,125.8L306.1,127.6L304.7,133.5L302.3,135.6L298.6,133.4L299.2,131.3L297.3,131.1L297.2,136.1L294.1,139.6L295.2,142.6L299.0,146.2L298.8,151.6L296.0,152.3L294.9,156.9L295.4,159.8L292.4,161.4L290.3,158.8L285.8,162.7L284.9,160.4L284.8,151.6L280.0,149.5L277.5,150.4L276.9,153.1L274.5,156.5L271.4,157.1L270.4,156.7L271.8,152.7L271.1,151.4L268.0,150.8L263.7,147.6L262.2,148.6L256.3,144.5L256.5,140.4L259.3,138.0L261.8,128.5L256.8,122.8L253.5,122.5L254.1,116.2L249.3,114.9L248.4,112.4L243.0,108.8L243.6,104.1L240.7,105.0L240.0,104.0L233.1,103.1L232.3,99.1L235.0,93.6L235.5,90.7L234.4,88.6L236.9,82.6L238.4,81.2L237.9,76.6L233.5,73.6L229.7,73.3L224.9,71.2L227.2,67.1L227.0,62.2L228.0,59.5L230.7,57.9L232.5,53.2L235.4,50.7L234.3,46.4L236.7,42.3L236.2,40.8L238.0,38.1L240.8,36.2L239.9,32.6L235.6,27.6L233.2,27.0L230.7,24.2L230.8,23.1L232.6,24.4L236.5,24.1L239.3,25.6L243.1,25.3L250.2,26.9L256.9,30.3L258.0,32.2L261.5,34.5L266.1,36.3L268.3,35.2L272.0,30.9L276.6,28.9L276.9,27.4L279.9,25.0L279.4,21.3L280.2,17.9L276.8,13.4L280.3,8.2L285.5,13.1L290.7,15.4Z", "eng": "Gijang-gun"}, "울주군": {"busan": false, "d": "M256.0,-235.8L256.5,-235.0L261.2,-235.5L263.0,-234.9L266.3,-235.6L269.3,-241.7L278.9,-236.0L279.5,-234.8L281.2,-235.9L281.7,-238.0L285.0,-239.9L286.1,-239.7L286.3,-238.0L289.1,-235.6L292.3,-234.1L295.5,-231.1L300.1,-230.2L301.4,-226.8L305.9,-226.8L309.0,-225.4L315.4,-224.5L318.9,-217.3L318.6,-213.4L316.5,-211.3L317.9,-208.3L317.1,-203.2L314.1,-198.9L314.5,-194.4L317.6,-190.1L323.2,-187.5L326.4,-188.9L330.2,-187.1L331.3,-187.9L335.7,-185.0L336.5,-183.0L340.0,-181.1L339.4,-177.6L340.6,-172.7L338.4,-168.7L338.0,-164.7L338.5,-163.0L341.8,-159.9L341.3,-156.5L337.0,-150.3L335.8,-145.1L338.0,-138.4L336.9,-135.9L338.4,-131.5L336.5,-132.9L332.3,-133.1L330.0,-135.2L331.4,-137.4L323.8,-139.9L320.3,-138.6L312.9,-142.0L314.5,-134.5L316.8,-132.6L317.1,-130.1L315.9,-129.8L315.4,-124.7L316.6,-120.6L318.6,-120.1L320.7,-117.1L319.0,-116.6L317.7,-113.7L318.3,-113.2L314.8,-115.2L314.0,-114.5L310.8,-108.6L306.3,-104.5L304.4,-104.4L303.0,-101.6L308.5,-101.6L309.8,-99.5L313.5,-99.1L314.6,-100.6L315.6,-100.3L316.6,-97.3L321.7,-97.5L326.0,-96.4L325.4,-94.3L326.3,-92.3L334.5,-85.8L335.0,-81.4L336.1,-81.2L337.7,-77.3L342.2,-71.0L343.5,-70.7L345.5,-72.9L346.3,-72.5L348.1,-69.1L353.2,-67.9L353.9,-65.3L355.8,-65.1L358.1,-66.6L359.7,-64.1L363.5,-61.6L365.4,-59.1L365.6,-56.2L364.1,-56.0L364.3,-54.8L370.6,-48.0L372.1,-36.0L373.5,-35.4L375.0,-36.6L378.2,-35.8L377.6,-32.0L374.6,-30.5L375.4,-28.6L381.4,-30.9L384.1,-36.6L386.7,-35.1L384.4,-32.7L382.3,-27.7L385.3,-26.3L386.6,-23.3L382.8,-23.1L379.4,-19.5L373.9,-20.2L380.9,-18.5L380.7,-11.3L376.0,-9.9L376.0,-7.8L379.9,-8.1L379.9,-4.9L378.2,-2.3L374.6,-1.8L375.6,4.6L371.8,5.8L370.1,7.5L370.8,11.1L368.9,16.3L369.5,16.6L369.2,18.7L375.5,21.1L375.1,24.7L378.7,26.5L379.4,30.8L377.3,33.4L372.2,33.7L369.0,35.6L369.0,34.4L366.4,32.4L363.0,33.1L361.4,38.9L357.0,39.1L355.2,40.1L354.2,45.9L351.7,45.7L349.5,51.8L346.4,53.7L347.5,52.5L346.6,51.7L344.2,52.1L341.7,47.8L336.7,47.2L335.5,45.3L332.9,45.4L329.3,43.8L331.9,40.2L332.5,36.8L329.8,32.7L330.9,25.9L329.1,25.3L327.6,20.8L322.2,14.5L320.7,9.6L316.1,11.9L311.6,9.4L311.7,11.4L310.4,12.6L305.2,11.7L303.3,12.3L302.3,14.7L299.1,14.1L292.0,15.7L285.5,13.1L281.4,9.1L282.4,5.5L285.4,3.1L286.1,0.4L289.1,-1.6L292.3,-5.7L291.8,-8.6L289.7,-9.7L287.7,-14.2L282.7,-15.7L280.8,-18.0L280.6,-22.7L282.0,-23.9L278.8,-29.0L274.7,-26.1L271.2,-25.7L267.5,-24.1L266.5,-25.1L264.1,-25.1L259.7,-24.0L259.4,-25.1L255.3,-27.2L251.4,-31.2L246.0,-34.1L243.8,-36.2L242.9,-38.9L238.7,-42.1L238.5,-43.4L232.9,-47.4L232.2,-48.9L232.6,-52.3L229.2,-57.2L224.7,-60.5L225.4,-64.6L223.8,-66.8L223.8,-71.0L222.9,-72.0L221.2,-72.9L219.4,-72.0L217.7,-73.3L213.9,-73.4L211.4,-76.0L202.4,-78.9L190.8,-85.4L189.8,-89.5L190.4,-92.9L193.2,-94.9L192.7,-98.7L179.0,-93.9L175.3,-94.9L171.1,-92.7L166.5,-91.9L164.2,-92.6L164.6,-95.6L163.3,-96.4L155.8,-95.4L156.2,-101.0L158.0,-104.5L156.6,-107.5L152.1,-113.2L147.0,-109.3L141.8,-117.3L141.1,-119.7L145.2,-122.0L156.1,-125.3L163.5,-134.5L166.6,-136.6L170.2,-137.2L170.2,-139.4L172.5,-142.8L173.7,-149.2L172.5,-151.5L172.7,-159.3L168.8,-161.4L166.7,-160.7L163.5,-161.4L162.6,-163.1L160.3,-164.4L162.3,-166.8L169.6,-171.4L171.4,-175.5L174.9,-176.5L180.3,-173.2L181.2,-173.5L185.1,-179.9L187.3,-187.0L200.9,-183.2L204.7,-179.4L208.0,-181.6L207.3,-185.9L200.1,-193.2L200.8,-200.8L199.6,-202.5L203.2,-207.0L201.8,-208.0L201.3,-210.8L207.7,-220.9L211.9,-223.2L213.7,-225.9L220.7,-228.5L227.4,-230.2L229.2,-230.3L230.3,-228.9L234.4,-230.1L236.1,-234.4L240.5,-233.0L242.1,-233.5L242.0,-235.5L243.8,-237.5L242.6,-239.4L245.3,-242.1L247.8,-242.5L251.9,-240.3L256.0,-235.8Z", "eng": "Ulju-gun"}, "김해시": {"busan": false, "d": "M72.9,3.3L76.4,3.4L79.0,6.1L80.8,13.3L81.9,13.3L83.2,21.3L85.2,23.6L91.9,26.1L102.0,25.8L105.3,26.7L112.0,32.1L125.5,46.4L135.5,50.1L139.0,52.9L141.6,58.7L142.3,67.0L144.6,69.7L147.0,75.1L152.3,80.5L155.0,81.5L161.1,86.0L165.7,91.3L167.7,96.6L157.9,120.9L152.4,125.6L142.5,128.9L132.2,130.4L127.2,130.4L124.5,128.1L121.9,128.9L115.5,134.3L109.9,137.0L107.8,136.6L105.3,132.5L103.9,132.2L103.2,133.9L103.3,132.2L100.7,134.3L102.7,136.8L95.7,139.4L89.3,138.5L86.4,141.5L84.8,141.8L79.5,148.1L83.1,154.8L83.0,158.2L86.4,162.6L85.5,165.1L86.1,170.3L81.4,168.6L80.8,170.0L82.8,171.3L83.6,175.4L86.3,178.1L85.9,179.5L82.0,180.2L82.2,183.9L83.2,185.4L82.6,185.7L80.3,186.3L76.4,180.5L77.3,179.3L78.8,180.2L80.6,177.2L80.2,175.4L77.7,173.4L73.1,173.0L64.9,175.6L62.8,180.6L58.6,179.8L53.4,182.4L50.6,182.0L46.4,179.0L41.9,179.9L40.2,178.8L37.0,180.6L34.8,179.9L32.7,181.3L30.3,181.3L23.1,179.5L16.3,175.3L14.1,172.6L10.4,173.0L9.6,175.5L6.6,173.6L3.8,174.6L0.6,173.8L2.6,159.9L3.8,155.4L6.4,153.3L6.5,148.2L2.0,144.7L-4.1,145.0L-7.3,144.1L-10.7,138.5L-11.4,130.3L-9.1,126.2L-8.4,119.6L-10.2,116.1L-12.6,116.7L-12.9,112.0L-17.5,102.1L-17.4,97.2L-21.4,87.9L-21.0,84.6L-22.9,76.4L-29.1,71.3L-29.2,68.6L-26.4,66.9L-18.8,68.0L-15.4,66.8L-17.4,63.3L-16.0,60.8L-16.1,57.6L-13.5,55.5L-10.9,58.6L-4.5,62.7L-0.6,61.8L1.5,59.2L1.0,51.7L3.6,50.4L6.1,50.6L6.2,45.2L7.9,46.7L7.3,48.8L8.0,49.0L14.7,40.7L21.4,40.0L28.1,36.3L33.6,29.5L38.2,19.8L40.6,17.7L46.1,14.7L53.1,13.7L72.9,3.3Z", "eng": "Gimhae-si"}, "밀양시": {"busan": false, "d": "M128.9,-171.8L130.7,-168.0L135.0,-164.6L134.8,-160.9L142.1,-159.3L148.1,-155.8L150.6,-156.1L156.9,-160.5L160.3,-164.4L163.8,-161.2L166.7,-160.7L168.8,-161.4L171.1,-160.7L172.7,-159.3L172.5,-151.5L173.7,-149.2L172.5,-142.8L170.2,-139.4L170.2,-137.2L166.6,-136.6L163.5,-134.5L155.0,-124.7L145.2,-122.0L141.1,-119.7L142.1,-116.5L147.0,-109.3L152.1,-113.2L157.6,-105.8L157.9,-103.4L156.2,-101.0L155.3,-95.6L151.8,-90.9L152.3,-87.0L149.4,-85.8L144.8,-80.3L135.5,-81.7L133.3,-78.7L133.0,-73.8L135.0,-70.5L138.9,-67.2L136.2,-63.1L137.4,-60.3L137.0,-57.4L139.4,-53.7L138.9,-50.2L136.2,-49.7L135.5,-48.1L136.6,-47.4L135.0,-45.5L128.2,-40.5L123.5,-42.1L118.1,-39.3L115.8,-40.5L113.7,-38.9L108.9,-38.6L108.0,-36.6L103.8,-33.3L103.2,-30.6L101.6,-29.8L102.5,-26.4L111.2,-19.4L112.1,-16.2L111.4,-14.6L105.7,-10.8L99.8,-14.8L96.7,-12.4L92.1,-10.8L92.9,-8.8L91.7,-3.0L90.1,-3.1L85.1,1.4L84.9,6.5L85.8,10.1L83.1,10.8L82.2,13.2L80.8,13.3L79.0,6.1L76.4,3.4L72.9,3.3L53.1,13.7L46.1,14.7L40.6,17.7L38.2,19.8L33.6,29.5L28.1,36.3L21.4,40.0L14.7,40.7L11.4,40.3L8.3,38.6L2.0,38.6L-13.5,25.0L-16.0,23.4L-22.3,21.6L-30.9,16.8L-42.4,16.8L-49.1,19.4L-54.5,18.7L-56.4,15.4L-56.4,14.4L-53.9,13.6L-55.2,10.8L-60.6,12.2L-61.9,11.2L-61.3,9.7L-58.5,8.9L-58.5,5.1L-55.2,1.5L-57.4,-9.5L-54.4,-16.5L-54.2,-19.5L-55.6,-19.9L-56.6,-22.9L-58.2,-24.6L-63.3,-26.0L-66.0,-35.4L-69.5,-38.8L-75.1,-36.8L-76.3,-34.4L-85.9,-39.4L-89.0,-39.9L-92.8,-39.1L-95.7,-40.0L-99.3,-44.6L-98.2,-49.8L-99.2,-52.5L-101.4,-54.1L-102.9,-64.0L-101.8,-66.7L-103.0,-67.4L-103.0,-69.0L-99.1,-79.4L-94.0,-79.5L-91.6,-82.5L-90.4,-86.4L-90.5,-87.7L-94.6,-90.0L-96.0,-92.4L-95.3,-96.3L-96.0,-99.0L-96.9,-100.9L-99.2,-102.5L-94.5,-103.5L-90.8,-102.3L-90.0,-104.8L-94.2,-115.9L-92.1,-117.3L-91.7,-119.9L-92.6,-122.3L-95.4,-124.4L-94.1,-127.6L-94.8,-134.2L-89.6,-137.7L-83.7,-134.4L-76.5,-135.6L-75.2,-137.3L-69.1,-138.4L-66.7,-139.9L-63.1,-137.9L-62.2,-140.8L-60.5,-140.9L-58.5,-144.1L-54.5,-145.3L-51.1,-147.7L-49.4,-147.4L-46.1,-144.6L-40.1,-146.4L-37.7,-145.4L-31.0,-145.1L-28.6,-142.5L-27.5,-136.9L-22.4,-132.9L-16.8,-133.7L-15.3,-132.6L-9.8,-135.5L-7.6,-132.7L-4.9,-131.3L-1.6,-132.2L5.3,-127.4L8.4,-127.1L10.5,-125.2L16.8,-126.8L27.8,-124.6L31.9,-127.2L33.6,-129.4L35.9,-133.1L37.0,-140.0L38.2,-141.2L42.4,-141.1L51.1,-146.4L57.1,-147.3L62.6,-141.1L63.9,-141.5L69.6,-147.2L72.8,-153.9L76.1,-156.0L78.2,-161.3L80.5,-162.9L81.7,-165.4L82.6,-173.4L86.3,-175.8L88.3,-174.7L88.3,-173.2L89.8,-171.0L92.7,-171.2L106.8,-179.6L122.7,-175.5L128.9,-171.8Z", "eng": "Miryang-si"}, "거제시": {"busan": false, "d": "M-120.1,438.2L-122.2,442.7L-125.2,445.5L-128.0,446.3L-129.3,445.8L-130.1,443.3L-130.3,439.1L-128.8,438.6L-127.3,437.7L-125.2,430.9L-123.2,429.6L-120.5,429.4L-118.0,430.4L-117.6,433.8L-120.1,438.2ZM-163.9,423.2L-162.5,423.3L-162.6,424.2L-164.3,425.8L-163.0,426.9L-161.6,426.5L-158.9,430.2L-160.5,432.2L-162.4,432.3L-164.0,431.6L-165.7,428.7L-168.4,428.6L-169.1,427.1L-168.5,422.4L-167.2,421.6L-163.9,423.2ZM-132.7,317.3L-127.0,318.8L-124.5,322.0L-124.5,325.2L-127.2,328.1L-133.5,331.6L-130.7,338.3L-125.7,341.9L-126.6,344.8L-130.6,343.4L-131.2,347.3L-128.9,347.5L-128.0,351.0L-131.6,352.2L-134.4,350.2L-134.0,348.5L-138.6,343.2L-139.2,340.8L-135.6,338.8L-134.7,334.5L-135.3,329.2L-139.1,325.0L-135.9,318.5L-136.2,317.3L-132.7,317.3ZM-52.8,290.3L-53.3,293.6L-57.2,298.6L-56.7,301.1L-54.1,301.5L-54.8,302.6L-56.4,302.1L-57.9,303.0L-56.2,308.9L-58.5,314.4L-62.0,315.7L-64.0,314.8L-66.6,315.1L-68.0,316.7L-69.2,315.5L-66.8,314.4L-66.8,313.1L-69.5,313.4L-70.2,311.7L-72.2,310.9L-74.1,312.4L-74.5,316.8L-75.6,318.1L-77.7,319.0L-78.9,318.5L-80.2,316.8L-79.2,315.5L-77.8,313.6L-78.7,311.0L-77.7,309.3L-75.7,308.2L-74.5,310.2L-72.1,309.0L-69.2,303.7L-70.3,301.9L-75.8,302.1L-74.8,298.9L-70.9,298.7L-68.2,300.0L-64.4,299.5L-64.0,296.4L-66.1,294.6L-66.5,292.1L-63.5,289.4L-63.0,287.5L-61.7,287.1L-60.4,290.2L-58.9,289.4L-56.3,284.9L-55.8,281.8L-53.0,286.5L-52.8,290.3ZM-40.5,457.8L-42.2,459.8L-42.7,462.2L-45.7,462.9L-47.4,465.7L-50.0,467.1L-54.1,463.8L-57.7,464.2L-61.0,468.6L-62.3,474.8L-62.1,476.9L-58.1,482.6L-56.4,483.0L-55.2,484.9L-56.9,486.9L-56.6,488.0L-53.4,490.9L-47.5,491.2L-47.0,488.8L-43.5,488.6L-42.1,489.7L-39.1,489.5L-36.0,492.6L-35.8,493.9L-34.7,494.2L-35.3,495.2L-38.0,494.0L-39.4,495.8L-39.0,500.9L-39.6,501.3L-41.9,499.4L-42.3,495.5L-41.1,494.0L-41.7,493.3L-43.1,493.6L-44.6,496.0L-47.5,493.3L-49.9,494.3L-52.7,492.7L-53.6,493.5L-54.1,497.1L-61.2,495.7L-67.6,499.2L-68.4,498.1L-67.0,497.7L-66.8,496.1L-68.7,494.9L-73.2,499.8L-72.1,501.5L-71.2,500.7L-69.5,501.4L-66.8,507.8L-63.3,508.8L-59.9,511.4L-59.9,512.8L-61.6,514.0L-62.1,516.8L-66.0,515.6L-68.4,512.5L-69.7,512.3L-72.9,513.8L-74.2,518.2L-75.5,518.1L-79.1,521.1L-85.3,519.6L-87.7,516.4L-91.6,516.1L-94.8,517.2L-96.9,520.4L-99.6,520.6L-99.9,516.9L-98.5,515.6L-98.3,511.3L-96.8,510.2L-94.2,511.3L-92.7,509.6L-93.0,507.7L-94.3,507.3L-94.7,505.6L-90.4,505.5L-83.8,502.9L-80.9,498.8L-81.4,496.5L-84.4,495.0L-87.0,496.2L-91.4,494.3L-94.2,494.7L-96.3,492.9L-98.5,492.9L-99.7,494.0L-100.3,493.1L-99.1,489.8L-99.6,485.9L-98.8,482.9L-96.3,480.4L-97.8,476.0L-94.6,474.5L-94.6,475.8L-93.5,476.7L-91.2,475.0L-85.9,475.6L-84.8,474.8L-84.7,472.5L-90.6,469.8L-87.7,467.3L-86.8,465.0L-88.6,463.9L-91.1,465.6L-96.2,466.0L-100.5,463.8L-101.2,466.1L-105.4,467.9L-105.2,469.8L-107.5,473.1L-112.6,472.8L-114.3,470.8L-114.2,465.8L-111.6,463.6L-109.3,464.3L-106.4,460.3L-104.8,459.8L-104.5,458.0L-110.5,455.4L-112.0,455.8L-113.2,459.6L-118.9,464.2L-120.2,466.3L-121.4,463.9L-119.2,459.2L-119.8,458.4L-121.5,458.7L-122.9,457.2L-120.4,456.4L-118.2,456.9L-115.9,455.1L-115.7,452.6L-114.8,452.0L-113.6,452.3L-112.8,455.1L-108.4,454.9L-104.5,453.0L-98.9,452.6L-95.1,449.5L-93.6,440.1L-94.8,434.7L-88.2,427.2L-88.7,426.1L-90.0,426.8L-93.4,424.3L-94.6,422.7L-93.7,421.7L-94.1,419.9L-97.9,417.4L-98.5,415.6L-96.7,414.8L-95.4,417.0L-93.2,417.4L-92.3,412.8L-98.7,407.9L-101.9,407.3L-105.4,413.3L-107.1,413.9L-108.3,415.8L-107.6,423.3L-120.0,422.7L-121.8,421.0L-123.4,422.6L-122.5,424.2L-124.0,426.1L-126.4,424.4L-126.0,423.0L-128.6,422.7L-131.8,423.6L-132.1,424.6L-130.3,424.8L-129.5,425.9L-133.5,427.9L-129.7,429.1L-129.2,431.9L-132.7,429.9L-134.7,431.1L-131.8,435.1L-136.5,441.7L-139.9,441.2L-140.8,434.7L-145.7,430.4L-145.9,428.0L-145.0,427.0L-145.5,423.1L-143.8,421.2L-147.7,422.9L-150.8,420.5L-157.2,417.9L-158.0,416.6L-157.6,415.2L-159.7,410.2L-158.1,408.8L-158.0,406.7L-161.0,406.8L-161.7,403.9L-161.1,396.8L-163.1,394.0L-160.7,385.3L-156.0,382.0L-152.1,376.5L-150.7,372.0L-148.2,374.2L-145.0,371.4L-147.8,370.8L-148.6,369.3L-148.2,367.8L-144.6,370.1L-142.4,369.3L-146.4,365.0L-144.0,365.6L-142.1,367.9L-136.8,366.0L-134.7,361.6L-129.7,355.6L-129.0,357.0L-126.4,358.2L-125.0,356.6L-123.0,357.4L-123.7,359.2L-120.1,363.1L-119.7,365.1L-116.2,368.1L-111.5,369.0L-109.7,370.7L-109.7,372.0L-104.4,374.4L-101.5,373.8L-99.9,372.1L-99.9,370.4L-102.1,368.3L-102.4,366.6L-96.6,363.6L-99.0,362.9L-99.4,360.0L-98.3,363.3L-92.6,362.0L-91.8,368.5L-90.9,368.9L-87.7,368.4L-88.3,363.1L-87.1,371.3L-84.8,370.9L-85.8,362.9L-84.7,370.9L-82.4,370.6L-82.1,368.0L-80.8,368.1L-81.5,375.1L-80.5,374.9L-79.9,371.6L-79.0,371.4L-76.7,374.2L-76.4,377.3L-74.5,379.9L-70.3,378.5L-69.7,374.3L-74.4,368.5L-75.4,366.3L-75.0,363.0L-76.1,361.3L-78.2,363.1L-80.4,362.2L-78.6,355.8L-83.2,354.7L-85.1,352.0L-85.2,349.7L-86.6,351.1L-90.1,347.0L-90.0,344.5L-93.9,341.1L-94.0,338.3L-92.2,335.2L-92.7,334.0L-90.6,334.7L-89.6,336.5L-87.5,335.3L-85.1,329.9L-86.6,323.7L-81.6,321.0L-79.0,324.2L-81.3,326.9L-82.3,330.0L-79.9,329.9L-74.8,326.0L-73.7,327.5L-70.4,325.5L-65.6,327.6L-64.5,326.5L-65.0,324.8L-66.3,324.1L-65.6,323.3L-59.5,329.2L-58.1,329.6L-56.6,328.4L-55.3,330.4L-54.1,327.2L-56.7,326.2L-56.6,324.0L-55.2,321.1L-54.7,314.0L-51.6,314.6L-49.0,312.4L-50.1,311.3L-52.5,311.3L-52.5,306.9L-51.6,305.7L-46.5,305.7L-44.4,307.4L-44.4,305.9L-46.0,304.4L-48.9,303.1L-49.1,300.3L-46.4,300.4L-46.0,301.5L-44.6,301.9L-41.8,299.6L-39.8,303.4L-40.1,307.3L-37.3,308.2L-36.0,306.9L-35.9,304.5L-37.5,301.1L-39.8,300.6L-40.8,299.2L-40.5,297.7L-37.8,297.5L-37.1,298.4L-35.5,297.5L-35.5,293.3L-36.6,292.0L-39.1,295.3L-44.2,293.3L-44.0,290.4L-41.8,289.0L-41.7,283.0L-39.0,282.5L-39.5,274.8L-38.1,273.7L-34.8,274.4L-33.7,272.9L-33.9,271.9L-38.8,269.8L-39.6,268.4L-37.4,268.2L-35.9,269.4L-32.9,269.6L-31.7,270.7L-30.6,274.6L-28.2,275.9L-24.6,275.0L-25.1,271.0L-20.9,274.9L-16.9,275.0L-15.5,277.8L-12.6,280.6L-12.2,284.2L-14.0,289.6L-13.5,291.2L-17.4,293.7L-19.1,291.7L-20.5,291.8L-23.4,294.6L-23.3,297.8L-20.2,298.1L-20.4,301.4L-22.4,300.4L-27.8,300.2L-28.7,301.8L-27.4,305.6L-26.1,306.0L-24.6,304.3L-23.8,305.4L-25.8,309.3L-25.9,311.9L-27.5,313.4L-26.4,318.8L-24.9,320.4L-22.6,319.8L-21.9,320.3L-19.6,324.9L-14.3,325.3L-13.4,327.7L-14.8,327.9L-15.3,330.1L-12.6,335.3L-8.6,337.3L-7.9,338.8L-8.4,345.3L-10.3,345.5L-12.3,342.3L-13.4,342.6L-15.3,346.1L-12.3,348.4L-14.0,351.2L-12.3,352.6L-13.6,354.2L-13.6,356.9L-11.8,359.9L-10.1,359.8L-9.8,362.0L-12.2,366.2L-16.0,363.5L-17.8,364.8L-16.2,368.8L-16.5,370.2L-14.6,371.0L-13.8,372.8L-20.1,373.9L-22.0,378.2L-21.6,379.7L-22.7,379.3L-24.3,381.0L-24.9,379.8L-26.4,379.7L-25.6,384.2L-27.5,389.0L-25.6,385.4L-23.4,383.5L-26.6,388.0L-24.4,389.2L-25.8,391.9L-25.2,392.5L-19.8,387.1L-20.4,389.5L-18.9,390.7L-21.2,393.6L-18.4,396.5L-13.4,390.0L-14.3,388.5L-13.1,386.8L-8.7,382.3L-12.4,377.2L-8.5,382.2L-6.3,381.7L-5.2,380.0L-3.5,380.4L-2.3,384.0L-0.0,384.5L3.2,380.0L7.5,376.8L5.8,381.1L3.2,383.1L-0.9,389.3L2.2,394.5L2.3,396.9L-4.0,401.5L-6.8,401.0L-6.0,399.9L-6.5,397.7L-9.3,397.9L-9.9,399.4L-6.6,404.0L-6.6,407.8L-3.4,410.0L-2.3,413.9L-3.0,415.5L-9.1,416.9L-11.9,411.1L-13.7,410.8L-22.5,416.2L-23.3,418.6L-22.6,423.5L-20.0,426.3L-18.3,426.6L-14.4,421.2L-11.8,419.2L-13.2,420.3L-12.8,421.3L-9.8,423.2L-8.5,427.0L-13.2,429.8L-12.5,431.5L-11.4,431.6L-11.1,437.3L-7.1,439.4L-3.0,448.1L-1.8,448.8L-2.1,450.6L0.3,454.9L0.0,457.3L-2.3,458.2L-5.7,453.5L-7.5,452.8L-10.2,453.8L-18.6,451.5L-18.1,448.9L-16.1,448.6L-15.1,447.2L-18.6,438.6L-20.9,438.2L-27.2,443.6L-25.3,445.7L-25.1,449.5L-30.2,450.1L-31.7,448.4L-28.4,444.0L-29.1,442.2L-40.7,437.3L-43.5,438.2L-45.0,440.0L-43.1,443.4L-45.1,446.7L-43.5,449.1L-45.1,452.8L-44.1,454.9L-40.5,457.8Z", "eng": "Geoje-si"}, "양산시": {"busan": false, "d": "M191.2,-93.8L189.8,-89.5L190.8,-85.4L202.4,-78.9L211.4,-76.0L213.9,-73.4L217.7,-73.3L219.4,-72.0L221.2,-72.9L222.9,-72.0L223.8,-71.0L223.8,-66.8L225.4,-64.6L224.7,-60.5L229.2,-57.2L232.6,-52.3L232.2,-48.9L232.9,-47.4L238.5,-43.4L238.7,-42.1L242.9,-38.9L243.8,-36.2L246.0,-34.1L251.4,-31.2L255.3,-27.2L260.9,-23.7L263.0,-24.9L266.5,-25.1L267.5,-24.1L271.2,-25.7L274.6,-26.1L278.8,-29.0L282.0,-23.9L280.6,-22.7L280.8,-18.0L282.7,-15.7L287.7,-14.2L289.2,-10.5L291.8,-8.6L292.2,-6.9L292.2,-5.2L286.1,0.4L285.4,3.1L282.4,5.5L281.4,9.1L280.3,8.2L276.8,13.4L280.2,17.9L279.4,21.3L279.9,25.0L276.9,27.4L276.6,28.9L272.0,30.9L267.4,36.0L265.0,36.0L261.5,34.5L258.0,32.2L256.9,30.3L250.2,26.9L243.1,25.3L239.3,25.6L236.5,24.1L232.6,24.4L230.8,23.1L230.7,24.2L233.2,27.0L235.6,27.6L239.9,32.6L240.8,36.2L238.0,38.1L236.2,40.8L236.7,42.3L234.3,46.4L235.5,49.7L235.1,51.2L232.5,53.2L230.7,57.9L228.0,59.5L226.4,69.3L224.9,71.2L223.0,69.8L217.7,72.1L213.9,72.1L211.3,73.5L204.0,81.5L201.5,78.9L194.3,78.5L190.5,85.2L191.5,88.0L188.5,90.8L187.6,93.9L176.7,91.9L169.1,93.0L166.9,94.2L165.7,91.3L161.1,86.0L155.0,81.5L152.3,80.5L147.0,75.1L144.6,69.7L142.3,67.0L141.6,58.7L138.9,52.8L135.5,50.1L125.5,46.4L112.0,32.1L105.3,26.7L102.0,25.8L91.9,26.1L85.2,23.6L83.2,21.3L81.8,16.0L83.1,10.8L85.8,10.1L84.9,6.5L85.1,1.4L90.1,-3.1L91.7,-3.0L92.9,-8.8L92.1,-10.8L96.7,-12.4L99.8,-14.8L105.7,-10.8L109.0,-12.3L112.1,-15.6L111.2,-19.4L101.5,-27.9L101.6,-29.8L103.2,-30.6L103.8,-33.3L108.0,-36.6L108.9,-38.6L113.7,-38.9L115.8,-40.5L118.1,-39.3L123.5,-42.1L128.2,-40.5L135.0,-45.5L136.6,-47.4L135.5,-48.1L136.2,-49.7L138.9,-50.2L139.4,-53.7L137.0,-57.4L137.4,-60.3L136.2,-63.1L138.9,-67.2L135.0,-70.5L133.0,-73.9L133.3,-78.7L135.4,-81.6L144.8,-80.3L149.4,-85.8L152.3,-87.1L151.8,-90.9L155.3,-95.6L163.3,-96.4L164.6,-95.6L164.2,-92.6L166.5,-91.9L171.1,-92.7L175.3,-94.9L179.0,-93.9L192.7,-98.7L193.2,-94.9L191.2,-93.8Z", "eng": "Yangsan-si"}, "창원시의창구": {"busan": false, "d": "M-64.5,23.5L-54.5,18.7L-49.1,19.4L-42.4,16.8L-30.9,16.8L-22.3,21.6L-16.0,23.4L-13.5,25.0L2.0,38.6L8.3,38.6L11.4,40.3L14.7,40.7L8.0,49.0L7.3,48.8L7.9,46.7L6.2,45.2L6.1,50.6L1.3,51.1L1.5,59.2L-0.6,61.8L-4.5,62.7L-10.9,58.6L-13.5,55.5L-16.1,57.6L-16.0,60.8L-17.4,63.3L-15.4,66.8L-18.8,68.0L-26.4,66.9L-29.1,68.6L-29.1,71.3L-22.9,76.4L-21.0,84.6L-21.4,87.9L-17.4,97.2L-17.5,102.1L-12.9,112.0L-12.6,116.7L-10.2,116.1L-8.5,120.9L-13.4,122.9L-14.8,121.9L-17.3,121.9L-27.4,124.9L-25.9,129.3L-29.5,134.1L-40.8,125.7L-37.2,119.3L-40.9,118.5L-40.9,115.8L-45.4,115.0L-51.6,116.9L-55.1,119.5L-53.5,118.6L-40.9,125.7L-42.2,127.5L-45.3,127.4L-47.3,128.5L-49.3,127.4L-54.4,134.8L-58.5,133.5L-64.0,135.2L-65.8,134.5L-69.0,136.5L-70.3,134.8L-73.2,134.3L-74.2,135.2L-78.2,132.6L-75.8,122.9L-77.7,120.2L-84.2,115.2L-83.6,112.6L-82.8,112.4L-85.2,108.0L-87.6,105.3L-91.8,103.8L-94.5,101.2L-93.9,95.5L-90.5,94.6L-91.9,91.2L-95.9,90.4L-96.8,84.1L-99.5,81.6L-102.0,74.4L-96.3,68.4L-102.5,62.9L-102.9,58.8L-106.9,54.1L-104.9,51.7L-103.6,47.8L-107.0,44.0L-106.9,42.1L-108.4,39.5L-107.1,37.5L-110.3,35.3L-108.9,33.8L-109.0,32.1L-103.1,31.5L-102.8,28.7L-99.3,25.4L-101.2,20.8L-99.7,16.7L-99.8,14.3L-94.5,11.1L-89.5,6.2L-84.5,4.9L-79.4,10.9L-64.5,23.5Z", "eng": "Uichanggu"}, "창원시성산구": {"busan": false, "d": "M-37.9,118.8L-37.0,119.8L-40.8,125.7L-29.5,134.1L-25.9,129.3L-27.4,124.9L-17.3,121.9L-14.8,121.9L-13.8,123.0L-9.0,121.3L-8.4,121.9L-9.6,127.9L-11.4,130.3L-10.7,138.5L-7.3,144.1L-4.1,145.0L2.0,144.7L6.5,148.2L7.0,151.0L6.4,153.3L3.8,155.4L2.6,159.9L-0.9,181.7L-4.3,181.1L-13.7,176.7L-17.0,174.0L-31.1,171.8L-33.0,170.1L-37.1,169.1L-42.8,163.7L-46.5,163.5L-52.2,164.0L-56.9,166.9L-62.1,166.7L-73.7,180.3L-74.4,183.0L-77.5,185.2L-79.4,185.9L-79.8,185.2L-80.1,180.6L-78.9,177.4L-80.6,176.8L-81.7,178.6L-86.3,175.4L-85.1,173.0L-87.1,171.9L-89.9,168.3L-90.1,155.8L-92.0,152.8L-91.1,152.2L-91.9,149.7L-80.0,140.3L-75.2,140.9L-71.2,140.2L-65.2,134.9L-58.5,133.5L-54.4,134.8L-49.3,127.4L-47.3,128.5L-45.3,127.4L-42.2,127.5L-40.9,125.6L-53.5,118.6L-55.1,119.5L-54.4,118.4L-45.9,115.1L-43.1,115.0L-40.9,115.8L-40.9,118.5L-37.9,118.8Z", "eng": "Seongsangu"}, "창원시진해구": {"busan": false, "d": "M-53.2,219.8L-47.5,219.9L-51.3,221.0L-51.9,223.2L-48.8,222.4L-48.2,228.3L-53.3,224.2L-57.3,224.6L-58.6,221.6L-56.4,222.0L-56.0,220.1L-53.2,219.8ZM19.1,251.7L18.0,250.9L15.6,251.9L14.5,253.9L13.1,253.1L13.7,249.9L16.1,248.6L14.3,240.6L9.6,240.5L6.7,237.2L4.1,237.6L3.1,239.5L1.1,240.4L3.8,234.8L2.2,234.5L0.1,236.6L-2.6,232.3L-2.5,230.6L-0.3,226.5L2.3,225.2L2.2,224.0L-0.8,224.4L-2.4,228.3L-6.8,231.4L-5.7,228.5L-6.6,227.9L-7.4,228.7L-9.3,226.1L-12.8,227.5L-15.7,227.4L-15.1,220.7L-16.2,218.8L-17.1,218.9L-18.1,221.3L-22.5,219.6L-24.2,221.5L-22.7,223.8L-25.2,225.4L-26.8,223.9L-26.8,226.0L-31.4,222.0L-31.1,218.2L-31.7,217.6L-33.0,218.7L-31.5,217.2L-29.1,217.6L-27.2,216.6L-23.9,211.5L-24.7,204.8L-28.4,199.3L-26.1,198.2L-26.6,195.2L-27.6,194.3L-30.1,195.7L-28.8,197.8L-31.8,192.9L-29.9,188.4L-36.9,189.0L-42.2,192.2L-40.7,194.4L-40.7,198.5L-38.0,204.3L-38.4,205.6L-41.1,206.4L-42.2,208.4L-44.9,210.1L-47.1,207.0L-45.7,205.1L-46.8,201.2L-49.3,197.4L-49.5,196.4L-52.9,197.4L-58.3,197.3L-59.7,190.0L-59.3,188.1L-58.2,189.7L-56.6,189.3L-56.6,186.2L-62.3,187.0L-63.3,187.9L-62.8,189.7L-67.3,187.5L-69.5,187.8L-69.7,190.7L-74.0,197.2L-72.4,199.4L-67.9,199.6L-73.6,199.2L-75.7,194.2L-79.7,196.1L-81.3,195.0L-79.1,191.4L-76.3,190.6L-76.3,188.9L-78.1,188.3L-79.4,185.9L-74.4,183.0L-73.7,180.3L-70.1,176.8L-67.7,172.5L-62.1,166.7L-56.9,166.9L-52.2,164.0L-42.8,163.7L-37.1,169.1L-33.0,170.1L-31.1,171.8L-17.0,174.0L-13.7,176.7L-4.3,181.1L-0.9,181.7L0.6,173.8L3.8,174.6L6.6,173.6L9.6,175.5L10.4,173.0L14.1,172.6L16.3,175.3L23.1,179.5L28.2,181.3L32.7,181.3L37.7,189.1L37.9,192.7L40.7,192.2L41.3,194.7L46.0,199.6L51.4,200.8L53.3,202.9L56.7,201.6L57.7,202.5L59.9,206.8L58.5,209.8L60.1,212.6L62.7,213.8L63.0,217.1L62.1,219.5L57.8,222.6L55.9,222.0L50.9,222.5L48.9,229.2L47.6,230.5L45.5,230.8L48.3,230.6L50.8,228.2L54.1,231.4L52.7,234.2L49.8,234.5L49.8,235.5L47.9,236.6L43.6,236.6L43.6,240.7L27.3,240.6L25.9,234.9L30.5,228.4L36.9,228.6L38.2,225.2L37.8,224.2L36.0,223.6L32.1,225.2L29.5,225.1L31.5,222.6L29.5,218.7L30.2,214.1L27.3,213.6L26.0,214.6L24.0,221.7L19.7,224.7L18.0,221.3L14.0,220.1L15.6,225.7L27.0,225.8L27.0,229.7L23.9,234.1L24.0,237.3L20.2,236.6L20.3,249.1L20.1,250.1L18.7,250.6L19.1,251.7Z", "eng": "Jinhaegu"}}, "cent": {"중구": [178.2, 220.0], "서구": [167.8, 221.8], "동구": [185.9, 202.8], "영도구": [198.2, 239.9], "부산진구": [185.0, 175.2], "동래구": [206.8, 144.7], "남구": [216.2, 205.0], "북구": [172.9, 127.4], "해운대구": [252.4, 154.1], "사하구": [142.3, 231.8], "금정구": [214.5, 105.3], "강서구": [99.3, 183.1], "연제구": [209.3, 162.4], "수영구": [226.5, 178.2], "사상구": [150.4, 180.7], "기장군": [281.2, 76.2]}, "pins": {"삼락생태공원": [141.0, 171.7], "자갈치시장": [177.3, 226.4], "국제시장": [176.2, 223.1], "부평깡통시장": [174.6, 222.9], "구포시장": [156.6, 141.5], "기장시장": [292.0, 115.8], "다대포": [138.1, 263.8], "감천문화마을": [165.1, 225.8], "해운대": [256.5, 180.1], "광안리": [231.0, 184.2], "송도": [169.3, 242.1], "보수동책방골목": [176.5, 221.7], "부전시장": [195.4, 177.2], "흰여울": [185.2, 240.0]}, "river": "M156.7,122.4L157.4,126.2L157.1,129.6L155.9,139.3L154.9,143.2L151.2,148.2L147.6,151.8L143.2,155.0L138.1,158.3L136.2,161.5L136.2,166.6L136.1,172.0L136.0,175.9L134.7,183.1L134.5,186.2L134.3,189.9L134.3,193.5L134.0,196.6"};
+const EAST = ['해운대구','수영구'];
+function mapSVG(o){
+  o = o || {}; const hl = o.hl || {}; const pins = o.pins || [];
+  const z = o.zoom || 1; let vx = 0, vy = 0, vw = M.W, vh = M.H;
+  if (z > 1) { const c = M.cent[Object.keys(hl)[0]]; vw = M.W / z; vh = M.H / z; vx = c[0] - vw / 2; vy = c[1] - vh / 2; }
+  const fs = n => (n / z).toFixed(2);
+  const halo = `stroke="#fff" stroke-width="${fs(2.4)}" paint-order="stroke" stroke-linejoin="round"`;
+  let s = `<svg viewBox="${vx} ${vy} ${vw} ${vh}" role="img" aria-label="Busan district map" font-family="Pretendard,sans-serif"><defs>
+   <pattern id="wv" width="${14/z}" height="${8/z}" patternUnits="userSpaceOnUse"><path d="M0 ${5/z} Q${3.5/z} ${2/z} ${7/z} ${5/z} T${14/z} ${5/z}" fill="none" stroke="#b9cde3" stroke-width="${1/z}"/></pattern>
+   <pattern id="ht" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="5" height="5" fill="#f6f2ea"/><line x1="0" y1="0" x2="0" y2="5" stroke="#d3ccbd" stroke-width="2"/></pattern></defs>
+   <rect x="${vx}" y="${vy}" width="${vw}" height="${vh}" fill="url(#wv)"/>`;
+  for (const [n, v] of Object.entries(M.shapes)) if (!v.busan) s += `<path d="${v.d}" fill="#ebe5d9"/>`;
+  for (const [n, v] of Object.entries(M.shapes)) if (v.busan) {
+    const f = hl[n] || (o.east && EAST.includes(n) ? 'url(#ht)' : '#fbf8f1');
+    s += `<path d="${v.d}" fill="${f}" stroke="#fff" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>`;
+  }
+  s += `<path d="${M.river}" fill="none" stroke="#9fbfe0" stroke-width="5" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/>`;
+  for (let [n, [x, y]] of Object.entries(M.cent)) {
+    const on = !!hl[n];
+    if (n === '중구' && z === 1) {
+      s += `<line x1="${x}" y1="${y}" x2="${x+20}" y2="${y-6}" stroke="${on?hl[n]:'#8a8f9e'}" stroke-width="1"/><text x="${x+22}" y="${y-4}" font-size="${on?9:7}" font-weight="800" fill="${on?hl[n]:'#7a7f8e'}" ${halo}>${n}</text>`;
+      continue;
+    }
+    if (on && z > 1) continue; // zoomed view: pins carry the labels
+    if (n === '사상구' && pins.includes('삼락생태공원')) { x += 7; y -= 13; }
+    if (o.nudge && o.nudge[n]) { x += o.nudge[n][0]; y += o.nudge[n][1]; }
+    const big = on ? 9 : 7;
+    s += on ? `<text x="${x}" y="${y}" text-anchor="middle" font-size="${fs(big)}" font-weight="800" fill="#fff">${n}</text>`
+            : `<text x="${x}" y="${y}" text-anchor="middle" font-size="${fs(big)}" font-weight="600" fill="#8a8f9e" ${halo}>${n}</text>`;
+  }
+  if (o.east) s += `<text x="${M.cent['해운대구'][0]+6}" y="${M.cent['해운대구'][1]+30}" text-anchor="middle" font-size="7" font-weight="700" fill="#6b6f80" ${halo}>Main beaches</text>`;
+  pins.forEach((n, i) => { const p = M.pins[n]; if (!p) return;
+    if (n === '삼락생태공원') {
+      const sz = 15/z, w = sz*0.89, bs = sz*1.15, bw = bs*0.905;
+      s += `<image href="${A('icon_pick_bg.png')}" x="${p[0]-bw/2}" y="${p[1]-bs/2}" width="${bw}" height="${bs}"/><image href="${A('icon_pick_grad.png')}" x="${p[0]-w/2}" y="${p[1]-sz/2}" width="${w}" height="${sz}"/><text x="${p[0]-sz*0.75}" y="${p[1]+3/z}" text-anchor="end" font-size="${fs(8)}" font-weight="800" fill="#0b3387" ${halo}>BUROCK</text>`;
+    } else {
+      const lab = (o.labels && o.labels[n]) || n; const left = o.left && o.left.includes(n);
+      s += `<circle cx="${p[0]}" cy="${p[1]}" r="${fs(3.6)}" fill="#ec9c00" stroke="#fff" stroke-width="1.2" vector-effect="non-scaling-stroke"/>`;
+      const up = o.up && o.up.includes(n);
+      if (o.pinLabels && lab.trim()) s += `<text x="${up ? p[0] : p[0] + (left?-6:6)/z}" y="${up ? p[1]-6/z : p[1]+3/z}" text-anchor="${up?'middle':left?'end':'start'}" font-size="${fs(7.5)}" font-weight="800" fill="#0b3387" ${halo}>${lab}</text>`;
+    } });
+  return `<div class="map">${s}</svg></div>`;
+}
+const naver = q => 'https://map.naver.com/p/search/' + encodeURIComponent('부산 ' + q);
+const area = id => D.areas.find(a => a.id === id);
+
+function strip(active){
+  const items = [['home','Home',ICON.home,'#home'], ...D.areas.map(a=>[a.id,a.title,`<img src="${A(a.face)}" alt="">`,'#day/'+a.id]),
+    ['markets','Markets',ICON.market,'#markets'],['essentials','Essentials',ICON.star,'#essentials'],['events','Events',ICON.culture,'#events'],['story','BUROCK Story',ICON.trad,'#story']];
+  document.getElementById('strip').innerHTML = items.map(([id,l,ic,h])=>`<a href="${h}" class="${id===active?'on':''}">${ic}${l}</a>`).join('');
+}
+function sitemap(){
+  return [['#home','HOME',`<img src="${A('icon_circle_grad.png')}">`],
+    ...D.areas.map(a=>['#day/'+a.id,a.title.toUpperCase(),`<img src="${A(a.face)}">`]),
+    ['#culture','CULTURE',ICON.culture],['#tradition','TRADITION',ICON.trad]]
+    .map(([h,l,ic])=>`<a href="${h}"><i>${ic}</i>${l}</a>`).join('');
+}
+function foot(){
+  document.getElementById('foot').innerHTML = `<p class="fine">Restaurant picks: Taste of Busan 2025 (부산의 맛, Busan City official food guide), Saha-gu Office, VisitBusan. Times are suggestions. Check hours before you go.<br>Prototype · Visual Systems BI · Fall 2026</p>`;
+}
+function home(){
+  strip('home');
+  return `<section class="hero">
+    <h2>ONE MORE <em>DAY</em><br>BUSAN</h2>
+    <p>The show ends. Busan doesn't.<br>공연은 끝나도, 부산은 계속된다</p>
+    <div class="band"><img src="assets/seagull.png"><img class="c" src="assets/shark.png"><img src="assets/mackerel.png"></div>
+    <div class="floor"></div>
+  </section>
+  <h3 class="sec">DAY GUIDES</h3>
+  <div class="hday"><div class="hmap">${mapSVG({hl:Object.fromEntries(D.areas.flatMap(a=>a.districts.map(g=>[g,a.color]))), pins:['삼락생태공원'], east:true})}
+  <div class="mapcap">${D.areas.map(a=>`<span><i style="background:${a.color}"></i>${a.title}</span>`).join('')}<span><i style="background:#e4ddcf"></i>Main beaches (East)</span></div>
+  </div><div class="hgap"></div>
+  <div class="cards">${D.areas.map(a=>`<a class="card" href="#day/${a.id}">
+     <div class="th" style="background-image:url('${A(a.motif)}')"><img src="${A(a.img)}" alt=""></div>
+     <div class="tx"><small>${a.ko.split(' · ').join(', ')}</small><b>${a.title}</b><small>${a.stops.length} stops, ${a.span}</small></div></a>`).join('')}</div></div>
+  <h3 class="sec">MARKETS</h3>
+  <div class="list">${D.markets.slice(0,3).map((m,i)=>`<a href="#market/${i}"><span class="tm"></span><span class="nm"><small>${m.tag} · ${m.gu}</small><b>${m.name}</b><span>${m.ko}</span></span><span class="ar">›</span></a>`).join('')}</div>
+  <a class="more" href="#markets"><i>→</i>All markets</a>
+  <h3 class="sec">ESSENTIALS</h3>
+  <div class="prow">${D.essentials.map(e=>`<a href="#essentials"><img src="${A('ess/'+e.slug+'.jpg')}" alt="" style="height:96px"><small>${e.tag}</small><b>${e.name}</b></a>`).join('')}</div>
+  <a class="more" href="#essentials"><i>→</i>Busan essentials</a>
+  <h3 class="sec">CITY OF CULTURE</h3>
+  <div class="prow">${D.events.map(v=>`<a href="#event/${v.slug}"><img src="${A('posters/'+v.poster)}" alt=""><small>${v.mon}</small><b>${v.name}</b></a>`).join('')}</div>
+  <a class="more" href="#events"><i>→</i>Busan, city of culture</a>`;
+}
+function band(a, small){
+  return `<div class="dband${small?' sm':''}" style="background-image:url('${A(a.motif)}');color:${a.ink}">
+    <div class="bt"><small>${a.ko.split(' · ').join(', ')}</small><h1>${a.title.toUpperCase()}</h1>${small?'':`<p>${a.titleKo}<br>Guide: ${a.guide}<br>${a.stops.length} stops, <span style="white-space:nowrap">${a.span}</span></p>`}</div>
+    <img class="${a.id}" src="${A(a.img)}" alt=""></div>`;
+}
+const DG={sasang:"--f:#2c3088;--i:#ffffff;--s:#c9cbf2;--b1:#262a78;--b2:#20236a",saha:"--f:#cb1f2a;--i:#ffffff;--s:#ffd9db;--b1:#b51b25;--b2:#a1161f",oldtown:"--f:#f2b417;--i:#0b3387;--s:#3b4f8f;--b1:#f5c13d;--b2:#f7cc5c"};
+function day(id){
+  const a = area(id); strip(id);
+  return `<div class="dlay"><div class="dmap">${mapSVG({hl:Object.fromEntries(a.districts.map(g=>[g,a.color])), pins:a.pins, pinLabels:true, zoom:a.zoom||1, left:['부평깡통시장'], up:['국제시장'], nudge:a.nudge})}</div><div class="dmain">
+  ${band(a)}
+  <div class="dg" style="${DG[a.id]}"><ol>${a.stops.map((s,i)=>`${(i>0&&s.go)?`<li class="lg"><span>${s.go.mode==='walk'?'Walk':'Transit'}</span>${s.go.text.split(' · ').join(', ')}</li>`:''}<li class="st">
+     <time>${s.t}</time>
+     <div class="wh"><h4><a href="#place/${a.id}/${i}">${s.name}</a> <span>${s.ko}</span></h4>
+     ${s.line?`<p>${s.line}</p>`:''}<p class="nt">${s.cat.charAt(0)+s.cat.slice(1).toLowerCase()}, ${s.hood}</p>
+     <a class="nv" href="${naver(s.q||s.ko)}" target="_blank" rel="noopener">Naver Map ›</a></div>
+     <a href="#place/${a.id}/${i}" aria-label="${s.name}">${s.photo?`<img class="th" src="${A('photos/'+s.photo)}" alt="">`:`<span class="th" style="background-image:url('${A(a.motif)}')"></span>`}</a></li>`).join('')}</ol></div></div></div>`;
+}
+function place(id, i){
+  const a = area(id); const s = a.stops[i]; strip(id);
+  const row = (ic,h,v) => v ? `<div class="row">${RI[ic]}<div><h4>${h}</h4><p>${v}</p></div></div>` : '';
+  const prev = i>0 ? `<a href="#place/${id}/${i-1}">‹ ${a.stops[i-1].name}</a>` : `<a href="#day/${id}">‹ ${a.title}</a>`;
+  const next = i<a.stops.length-1 ? `<a href="#place/${id}/${i+1}" style="text-align:right">${a.stops[i+1].name} ›</a>` : `<a href="#day/${id}" style="text-align:right">${a.title} ›</a>`;
+  const hero = s.photo ? `<div class="hero2"><img src="${A('photos/'+s.photo)}" alt="${s.name}"><span class="cr">${s.credit}</span></div>`
+                       : `<div class="hero2 nophoto" style="background-image:url('${A(a.motif)}')"><span class="cr">No photo yet</span></div>`;
+  return `${hero}<div class="mstrip" style="background-image:url('${A(a.motif)}')"></div>
+  <div class="dt"><p class="when" style="color:${a.ink==='#fff'?a.color:'#b07d00'}">${s.t} · ${s.cat.toUpperCase()} · ${a.title.toUpperCase()}</p>
+  <h2>${s.name}</h2><p class="kname">${s.ko} · ${s.hood}</p>
+  ${s.src==='Taste of Busan 2025'?'<span class="badge">TASTE OF BUSAN 2025</span>':''}
+  <div class="localnote"><h5>LOCAL NOTE</h5><p>${s.local}</p></div>
+  <div class="info">${(i>0&&s.go)?row('train','GETTING HERE',`From ${a.stops[i-1].name}: ${s.go.text}`):''}${row('menu','MENU',s.menu)}${row('clock','HOURS',s.hours)}${row('pin','ADDRESS',s.addr)}${row('train','ACCESS',s.access)}${row('tel','TEL',s.tel)}</div>
+  ${s.src?`<p class="srcline">Info: ${s.src}. Hours may change.</p>`:''}
+  <a class="btn" href="${naver(s.q)}" target="_blank">Open in Naver Map</a>
+  <div class="pager">${prev}${next}</div></div>`;
+}
+function story(){
+  strip('story');
+  return `<div class="pill"><h1>BUROCK STORY</h1><span>부락이 걸어온 길</span></div>
+  <p class="tlead">From a free beach show in 2000 to 80,000 people by the river. BUROCK has moved across Busan, and each stage left something behind.</p>
+  <div class="tl2">${D.story.map(c=>`<div class="ev"><div class="yr">${c.y}</div><div class="bd">
+     <b>${c.place}</b><span class="ko">${c.ko}</span><p>${c.text}</p>
+     <p class="tmeta">${c.day?`<a href="#day/${c.day}">Visit on the ${area(c.day).title} ›</a> · `:''}${c.src}</p></div></div>`).join('')}</div>`;
+}
+function essentials(){
+  strip('essentials');
+  return `<div class="pill"><h1>BUSAN ESSENTIALS</h1><span>부산의 대표 명소</span></div>
+  <p class="tlead">You have probably heard of these. Enjoy them, then give one more day to the neighborhoods that need you.</p>
+  <div class="ess">${D.essentials.map(e=>`<div class="ec"><img src="${A('ess/'+e.slug+'.jpg')}" alt="${e.name}"><span class="cr">${e.credit}</span>
+     <div class="eb"><small>${e.gu} · ${e.tag}</small><b>${e.name}</b><span class="ko">${e.ko}</span><p>${e.text}</p>
+     ${e.hours?`<p class="sm">${e.hours}</p>`:''}
+     <p class="sm">${e.pair?`<a href="#day/${e.pair}">Pair with ${area(e.pair).title} ›</a> · `:''}<a href="${naver(e.q)}" target="_blank">Naver Map ›</a></p>
+     <p class="src2">Source: ${e.src}</p></div></div>`).join('')}</div>`;
+}
+function events(){
+  strip('events');
+  return `<div class="pill"><h1>BUSAN, CITY OF CULTURE</h1><span>문화의 도시 부산</span></div>
+  <p class="tlead">Come back for the next one. Busan is a UNESCO City of Film, and something big happens almost every season.</p>
+  <div class="cal">${D.events.map(v=>`<a class="evc" href="#event/${v.slug}"><img src="${A('posters/'+v.poster)}" alt="">
+     <div><small>${v.mon}</small><b>${v.name}</b><span>${v.ko}</span><em>${v.next}</em></div></a>`).join('')}</div>`;
+}
+function eventDetail(slug){
+  const v = D.events.find(x=>x.slug===slug); strip('events');
+  return `<div class="poster"><img src="${A('posters/'+v.poster)}" alt="${v.name} poster"><span class="cr">${v.credit}</span></div>
+  <div class="dt"><p class="when" style="color:#b07d00">${v.mon} · EVERY YEAR</p><h2>${v.name}</h2><p class="kname">${v.ko}</p>
+  <div class="stats">${v.stats.map(x=>`<div><b>${x[0]}</b><span>${x[1]}</span></div>`).join('')}</div>
+  <div class="localnote"><h5>WHY GO</h5><p>${v.why}</p></div>
+  <div class="info">
+   <div class="row">${RI.clock}<div><h4>LAST EDITION</h4><p>${v.last}</p></div></div>
+   <div class="row">${RI.clock}<div><h4>NEXT</h4><p>${v.next}</p></div></div>
+   <div class="row">${RI.pin}<div><h4>WHERE</h4><p>${v.venue}</p></div></div></div>
+  <p class="srcline">Source: ${v.src}</p>
+  ${v.day?`<a class="btn" href="#day/${v.day}">Plan a day: ${area(v.day).title}</a>`:''}
+  <a class="btn ghost" href="#events">All events</a></div>`;
+}
+function markets(){
+  strip('markets');
+  return `${mapSVG({hl:{}, pins:D.markets.map(m=>m.pin), pinLabels:true, labels:{'자갈치시장':'자갈치·국제·부평깡통','국제시장':' ','부평깡통시장':' '}})}
+  <div class="pill"><h1>BUSAN MARKETS</h1><span>부산의 시장</span></div>
+  <div class="list">${D.markets.map((m,i)=>`<a class="ph" href="#market/${i}"><span class="tm" style="font-size:10px">${m.gu}</span>
+     <span class="nm"><small>${m.tag}</small><b>${m.name}</b><span>${m.ko}</span></span><img class="thumb" src="${A('photos/'+m.photo)}" alt=""></a>`).join('')}</div>`;
+}
+function marketDetail(i){
+  const m = D.markets[i]; strip('markets');
+  return `<div class="hero2"><img src="${A('photos/'+m.photo)}" alt="${m.name}"><span class="cr">${m.credit}</span></div>
+  <div class="dt"><p class="when" style="color:#b07d00">${m.tag} · ${m.gu}</p><h2>${m.name}</h2><p class="kname">${m.ko}</p>
+  <div class="localnote"><h5>ORIGIN</h5><p>${m.origin}</p></div>
+  <h3 class="sub">WHERE TO EAT</h3>
+  <div class="shops">${m.shops.map(s=>`<div class="shop">${s.k?`<img src="${A('shops/'+s.k+'.jpg')}" alt="${s.name}">`:''}
+     <div class="sb"><span class="stall">${s.stall}</span><b>${s.name}</b><span class="ko">${s.ko}</span><p>${s.known}</p>
+     <p class="sm">${s.addr}${s.tel?` · <a href="tel:${s.tel}">${s.tel}</a>`:''}<br>${s.hours}</p>
+     <p class="sm"><a class="mapl" href="${naver(s.q)}" target="_blank">Naver Map →</a> <span class="cr2">${s.credit||'Info: '+s.src}</span></p></div></div>`).join('')}</div>
+  <h3 class="sub">WHAT TO ENJOY</h3>
+  <ol class="enjoy">${m.enjoy.map(x=>`<li><b>${x[0]}</b><p>${x[1]}</p></li>`).join('')}</ol>
+  <div class="info"><div class="row">${RI.clock}<div><h4>HOURS</h4><p>${m.hours}</p></div></div></div>
+  <p class="srcline">Source: ${m.src}</p>
+  ${m.day?`<a class="btn" href="#day/${m.day}">On the ${area(m.day).title}</a>`:''}
+  <a class="btn ${m.day?'ghost':''}" href="${naver(m.q)}" target="_blank">Open in Naver Map</a>
+  <div class="pager">${i>0?`<a href="#market/${i-1}">‹ ${D.markets[i-1].name}</a>`:'<span></span>'}${i<D.markets.length-1?`<a href="#market/${i+1}" style="text-align:right">${D.markets[i+1].name} ›</a>`:''}</div></div>`;
+}
+function reveal(){
+  if (!matchMedia('(min-width:1000px)').matches) return; // web layout only; phone stays as is
+  const sel = '.sec,.hero h2,.hero p,.hero .band img,.hday .map,.mapcap,.card,.list a,.more,.prow a,.dband .bt,.dband img,.dg .st,.dg .lg,.pill,.tlead,.ec,.evc,.ev,.shop,.enjoy li,.localnote,.info .row,.mrow,.dt h2,.stats div';
+  const els = [...document.querySelectorAll('#view ' + sel.split(',').join(',#view '))];
+  const seen = new Map();
+  els.forEach(el => { const p = el.parentElement; const k = (seen.get(p) || 0); seen.set(p, k + 1); el.style.setProperty('--d', Math.min(k, 6) * 70 + 'ms'); el.classList.add('rv'); });
+  if (!('IntersectionObserver' in window)) { els.forEach(el => el.classList.add('in')); return; }
+  const io = new IntersectionObserver(es => es.forEach(x => { if (x.isIntersecting) { x.target.classList.add('in'); io.unobserve(x.target); } }), { rootMargin: '0px 0px -8% 0px', threshold: .05 });
+  els.forEach(el => io.observe(el));
+}
+document.documentElement.classList.add('js');
+function route(){
+  const h = location.hash.slice(1) || 'home';
+  const [p, x, y] = h.split('/');
+  let html = home();
+  if (p === 'day' && area(x)) html = day(x);
+  else if (p === 'place' && area(x)) html = place(x, +y);
+  else if (p === 'markets') html = markets();
+  else if (p === 'essentials') html = essentials();
+  else if (p === 'events') html = events();
+  else if (p === 'event' && D.events.find(v=>v.slug===x)) html = eventDetail(x);
+  else if (p === 'market' && D.markets[+x]) html = marketDetail(+x);
+  else if (p === 'story') html = story();
+  document.getElementById('view').innerHTML = html;
+  window.scrollTo(0,0);
+  reveal();
+}
+foot(); window.addEventListener('hashchange', route); route();
+</script>
+</body>
+</html>
